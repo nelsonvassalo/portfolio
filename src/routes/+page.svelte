@@ -37,7 +37,8 @@
 				trigger: panel,
 				markers: true,
 				pin: true, // pin the trigger element while active
-				start: `top ${topLimit}`, // when the top of the trigger hits the top of the viewport // end after scrolling 500px beyond the start
+				start: `top ${topLimit}`,
+				end: ScrollTrigger.maxScroll, // when the top of the trigger hits the top of the viewport // end after scrolling 500px beyond the start
 				scrub: true, // smooth scrubbing, takes 1 second to "catch up" to the scrollbar
 				pinSpacing: false,
 				anticipatePin: 1,
@@ -58,11 +59,11 @@
 		panels.forEach((panel) => {
 			console.log(panel.clientHeight);
 			tl.fromTo(
-				panel,
+				panel.querySelector('video'),
 
 				{
-					scaleX: 0.5,
-					scaleY: 0.5
+					scaleX: 0.7,
+					scaleY: 0.7
 					// y: '50%'
 				},
 				{
@@ -70,12 +71,13 @@
 					scaleY: 1,
 					// stagger: panel.clientHeight * 0.1,
 					duration: 2,
+					ease: 'cubic.inOut',
 					scrollTrigger: {
 						markers: { startColor: 'black', endColor: 'blue' },
 						trigger: panel,
 						scrub: true,
-						start: 'top center',
-						end: "'+=1000"
+						start: 'top 40%',
+						end: '+=200'
 					}
 					// y: '-50%',
 					// duration: 0.2
@@ -169,7 +171,7 @@
 <aside class="panel">
 	<video src="videos/summit.mp4" autoplay loop muted bind:this={video} />
 </aside>
-<article class="panel">
+<article class="panel" style="background: #fff">
 	<h3>
 		One-man shop with 14 years of experience in digital experiences. Crafting culture-aware
 		interactions with a crisp eye for engaging artistic, brand and ecommerce websites.
@@ -192,6 +194,7 @@
 		height: 100%;
 		top: 0;
 		left: 0;
+		// backg§round: #fff;
 	}
 	.canvas {
 		position: fixed;
