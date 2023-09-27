@@ -3,23 +3,26 @@
 	let text;
 	let data;
 	let content;
+	export let tag;
+	export let className;
 
 	$: {
 		data = text?.innerText;
 		if (text) text.innerText = '';
 		if (data) content = Array.from(data);
+		console.log({ content });
 	}
 </script>
 
-<span bind:this={text}>
+<svelte:element this={tag} bind:this={text} class={className}>
 	<slot />
 	{#if content}
 		{#each content as letter}
-			{#if letter != ' ' || letter != '&nbsp;'}
+			{#if letter != (' ' || '' || '&nbsp;')}
 				<S>{letter}</S>
 			{:else}
-				&nbps;
+				{letter}
 			{/if}
 		{/each}
 	{/if}
-</span>
+</svelte:element>

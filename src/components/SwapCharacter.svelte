@@ -3,6 +3,7 @@
 	let div;
 	let hover = false;
 	let width;
+	let originalWidth;
 
 	onMount(() => {
 		// width = div.children[0].clientWidth;
@@ -22,10 +23,15 @@
 	function hoverHandler() {
 		// prevWidth = div.offsetWidth;
 		hover = true;
-	}
-	function leaveHandler() {
+		div.style.display = 'inline-block';
+		div.children[0].style.display = 'inline-block';
 		setTimeout(() => {
 			hover = false;
+			width = originalWidth;
+			setTimeout(() => {
+				div.style.display = 'inline';
+				div.children[0].style.display = 'inline';
+			}, 200);
 
 			// width = div.children[0].clientWidth;
 			// div.style.width = prevWidth + 'px';
@@ -34,13 +40,7 @@
 	}
 </script>
 
-<span
-	bind:this={div}
-	on:mouseenter={hoverHandler}
-	on:mouseleave={leaveHandler}
-	class:hover
-	style:width={width + 'px'}
->
+<span bind:this={div} on:mouseenter={hoverHandler} class:hover style:width={width + 'px'}>
 	<span>
 		<slot />
 	</span>
@@ -48,15 +48,18 @@
 
 <style lang="scss">
 	span {
-		display: inline-block;
+		// display: inline-block;
 		transition: width 0.1s linear;
 		position: relative;
 		cursor: default;
+		span {
+			// display: inline-block;
+		}
 		&.hover {
 			max-width: 100px;
 			width: 80px;
 			font-weight: 700;
-			text-transform: uppercase;
+			// text-transform: uppercase;
 			transition: opacity 0.2s linear;
 			span {
 				opacity: 1 !important;
