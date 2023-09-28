@@ -1,6 +1,6 @@
 <script>
 	import '../code/scss/main.scss';
-	import { onMount } from 'svelte';
+	import { SvelteComponent, onMount } from 'svelte';
 	import Lenis from '@studio-freight/lenis';
 
 	import html2canvas from 'html2canvas';
@@ -39,8 +39,6 @@
 		});
 		lenis.on('scroll', (e) => console.log(e));
 
-		console.log({ header });
-
 		const raf = (time) => {
 			lenis.raf(time);
 
@@ -57,51 +55,76 @@
 
 <Header bind:header />
 
+<Canvas />
 <main bind:this={main}>
-	<Canvas />
-
 	{#if loading}
 		<section style="background: black; position: fixed; width: 100%; height: 100%; top: 0; left: 0">
 			Loading
 		</section>
 	{/if}
-	<section bind:this={title}>
-		<S tag="h1">Nelson Vassalo</S>
-		<h2>
-			<S tag="span">Designer</S>
-			<S tag="span">& Developer</S>
-		</h2>
-		<small>&darr;</small>
-	</section>
 	<!-- <h1>Nelson Vassalo</h1>
 	<h2>Designer & Developer</h2> -->
+
+	<ScrollScene {header}>
+		<section bind:this={title} class="panel intro">
+			<div>
+				<S tag="h1">Nelson Vassalo</S>
+				<h2>
+					<S tag="span">Designer</S>
+					<S tag="span">& Developer</S>
+				</h2>
+				<small>&darr;</small>
+			</div>
+
+			<video src="videos/summit.mp4" autoplay loop muted bind:this={video} />
+		</section>
+		<section class="panel">
+			<article style="background: #fff">
+				<h3>
+					One-man shop with 14 years of experience in digital experiences. Crafting culture-aware
+					interactions with a crisp eye for engaging artistic, brand and ecommerce websites.
+				</h3>
+				<aside>
+					<h4>Design + Technology since 2009</h4>
+					<br />—<br />
+					<ul>
+						<li>Interaction Design</li>
+						<li>Frontend Development</li>
+						<li>Creative Coding with WebGL</li>
+					</ul>
+				</aside>
+			</article>
+		</section>
+		<section class="panel">
+			<article class="details">
+				<h3>Multiply</h3>
+				<div class="sidebar">
+					<h4>A sleek, fast website for a PR agency moving at the speed of culture.</h4>
+					<p>Front-end developer. <br />Made with Zero Studios.</p>
+					<ul class="tags">
+						<li>Sveltekit</li>
+						<li>Prismic</li>
+						<li>GSAP</li>
+					</ul>
+				</div>
+			</article>
+			<video src="videos/summit.mp4" autoplay loop muted bind:this={video} />
+		</section>
+		<section class="panel">
+			<h3>WOO</h3>
+			<div class="sidebar">
+				<h4>A sleek, fast website for a PR agency moving at the speed of culture.</h4>
+				<p>Front-end developer. <br />Made with Zero Studios.</p>
+				<ul class="tags">
+					<li>Sveltekit</li>
+					<li>Prismic</li>
+					<li>GSAP</li>
+				</ul>
+			</div>
+			<video src="videos/summit.mp4" autoplay loop muted bind:this={video} />
+		</section>
+	</ScrollScene>
 </main>
-<ScrollScene>
-	<aside class="panel">
-		<video src="videos/summit.mp4" autoplay loop muted bind:this={video} />
-	</aside>
-	<article style="background: #fff">
-		<h3>
-			One-man shop with 14 years of experience in digital experiences. Crafting culture-aware
-			interactions with a crisp eye for engaging artistic, brand and ecommerce websites.
-		</h3>
-		<aside>
-			<h4>Design + Technology since 2009</h4>
-			<br />—<br />
-			<ul>
-				<li>Interaction Design</li>
-				<li>Frontend Development</li>
-				<li>Creative Coding with WebGL</li>
-			</ul>
-		</aside>
-	</article>
-	<aside class="panel">
-		<video src="videos/summit.mp4" autoplay loop muted bind:this={video} />
-	</aside>
-	<aside class="panel">
-		<video src="videos/summit.mp4" autoplay loop muted bind:this={video} />
-	</aside>
-</ScrollScene>
 
 <style lang="scss">
 	:global(h1) {
@@ -137,69 +160,64 @@
 		grid-column: 1 / span 8;
 		line-height: 1.2;
 	}
-	main {
+
+	small {
+		font-size: 10.75rem;
+		align-self: flex-end;
+		font-weight: 500;
+	}
+
+	.intro div {
+		// flex-wrap: wrap;
+		justify-content: space-between;
 		text-align: left;
 		line-height: 1;
 		width: 100%;
 		display: flex;
 		flex-direction: column;
+		position: relative;
 		// align-items: end;
 		justify-content: end;
 		padding-block: 5.25rem;
 		background: rgba(255, 255, 255, 0.1);
-		background-size: 1rem 100%;
-		background-repeat: repeat-x;
-		backdrop-filter: blur(50px);
+		// backdrop-filter: blur(50px);
 		// position: absolute;
 		z-index: 10;
-		section {
-			display: flex;
-			flex-wrap: wrap;
-			justify-content: space-between;
-		}
-
-		small {
-			font-size: 10.75rem;
-			align-self: flex-end;
-			font-weight: 500;
-		}
 	}
 	.spacer {
 		height: 50%;
 	}
+
 	.panel {
-		// position: absolute;
+		position: relative;
 		width: 100%;
-		height: 100%;
+		// min-height: 100%;
 		// top: 0;
 		// left: 0;
 		z-index: 2;
 		// position: absolute;
 		// backg§round: #fff;
-	}
-	.canvas {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: -1;
+		video {
+			width: 100%;
+			border-radius: 0.5rem;
+			// transform: scale(0.6);
+			transform-origin: 50% 100%;
+			position: absolute;
+			bottom: 0;
+			// position: sticky;
+			// margin-bottom: -2rem;
+		}
 	}
 
 	aside {
 		// transform: scale(0.7);
-		transform-origin: 50% 100%;
 		padding: 1rem;
 		// position: fixed;
 		width: 100vw;
-		height: 100dvh;
+		// height: 100dvh;
 		// top: 0;
 		// left: 0;
-		z-index: -1;
-		video {
-			width: 100%;
-			border-radius: 0.5rem;
-		}
+		// z-index: -1;
 	}
 	article {
 		display: grid;
@@ -211,5 +229,9 @@
 			grid-column: 10 / span 3;
 			width: auto;
 		}
+	}
+
+	.details {
+		grid-template-columns: subgrid;
 	}
 </style>

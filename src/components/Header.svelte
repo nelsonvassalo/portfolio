@@ -1,20 +1,21 @@
 <script>
 	import { onMount } from 'svelte';
+	import moment from 'moment-timezone';
 	import S from '../components/SwapWord.svelte';
 	import Ticker from '../components/SpotifyTicker.svelte';
 
 	let today;
+	let date;
 	export let header;
 
 	onMount(() => {
-		let date;
 		console.log({ header });
 		const pad = (el, digits = 2, holder = '0') => {
 			return el.toString().padStart(digits, holder);
 		};
 		function getToday() {
-			date = new Date();
-			today = `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+			date = moment();
+			today = date.tz('Europe/Lisbon').format('HH:mm');
 		}
 
 		getToday();
@@ -39,8 +40,8 @@
 	{#if today}
 		<aside>
 			<time datetime={today}>LIS {today}</time>
-			<time datetime={today.toLocaleString('en-US', { timeZone: 'America/New_York' })}
-				>NYC {today.toLocaleString('en-US', { timeZone: 'America/New_York' })}</time
+			<time datetime={date.tz('America/New_York').format('HH:mm')}
+				>NYC {date.tz('America/New_York').format('h:mm')}</time
 			>
 		</aside>
 	{/if}
