@@ -9,9 +9,12 @@
 	onMount(() => {
 		let date;
 		console.log({ header });
+		const pad = (el, digits = 2, holder = '0') => {
+			return el.toString().padStart(digits, holder);
+		};
 		function getToday() {
 			date = new Date();
-			today = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`.padStart(2, '0');
+			today = `${pad(date.getHours())}:${pad(date.getMinutes())}`;
 		}
 
 		getToday();
@@ -19,7 +22,7 @@
 		const timer = setInterval(() => {
 			date = new Date();
 			getToday();
-		}, 1000);
+		}, 60000);
 		return () => {
 			clearInterval(timer);
 		};
@@ -66,11 +69,11 @@
 		// padding: 1em;
 		padding: 0.15em;
 		:global(a) {
-			padding: 0.7em 0.75em 0.6em;
+			padding: 0.7em 1.5em 0.6em;
 			display: inline-block;
 			border-radius: 4px;
 			cursor: pointer;
-			margin-right: 1em;
+			// margin-right: 1em;
 			&:hover {
 				background: #f2f2f2;
 			}
