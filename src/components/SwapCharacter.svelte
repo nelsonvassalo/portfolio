@@ -1,18 +1,32 @@
 <script>
 	import { afterUpdate, beforeUpdate, onMount, tick } from 'svelte';
+	import FontFaceObserver from 'fontfaceobserver';
 	let div;
-	let hover = false;
+	let hover = true;
 	let width;
-	let originalWidth;
+	let hoverWidth;
+	let initialWidth;
 
-	onMount(() => {
+	onMount(async () => {
+		let font = new FontFaceObserver('Object Sans', {
+			weight: 700
+		});
+		font.load().then(async (font) => {
+			console.log({ font });
+			console.log('loaded font');
+			hoverWidth = div.offsetWidth;
+			hover = false;
+			await tick();
+			initialWidth = div.offsetWidth;
+			console.log('🚀 ~ hoverWidth:', { $$slots, hoverWidth, initialWidth });
+		});
+
 		// width = div.children[0].clientWidth;
 		// div.style.width = div.offsetWidth;
 	});
 
 	afterUpdate(() => {
-		width = div.children[0].clientWidth;
-
+		// width = div.children[0].clientWidth;
 		// width = `${div.offsextWidth}px`;
 		// div.style.width = width;
 		// width  = 'auto';
@@ -23,24 +37,26 @@
 	function hoverHandler() {
 		// prevWidth = div.offsetWidth;
 		hover = true;
-		div.style.display = 'inline-block';
-		div.children[0].style.display = 'inline-block';
+		width = hoverWidth;
+	}
+	function leaveHandler() {
 		setTimeout(() => {
 			hover = false;
-			width = originalWidth;
-			setTimeout(() => {
-				div.style.display = 'inline';
-				div.children[0].style.display = 'inline';
-			}, 200);
 
-			// width = div.children[0].clientWidth;
+			width = initialWidth;
 			// div.style.width = prevWidth + 'px';
 			// width = prevWidth;
 		}, 750);
 	}
 </script>
 
-<span bind:this={div} on:mouseenter={hoverHandler} class:hover style:width={width + 'px'}>
+<span
+	bind:this={div}
+	on:mouseenter={hoverHandler}
+	on:mouseleave={leaveHandler}
+	class:hover
+	style:width={width + 'px'}
+>
 	<span>
 		<slot />
 	</span>
@@ -48,18 +64,17 @@
 
 <style lang="scss">
 	span {
-		// display: inline-block;
+		display: inline-block;
 		transition: width 0.1s linear;
 		position: relative;
 		cursor: default;
 		span {
-			// display: inline-block;
+			display: inline;
 		}
 		&.hover {
-			max-width: 100px;
-			width: 80px;
+			// max-width: 100px;
+			// width: 80px;
 			font-weight: 700;
-			// text-transform: uppercase;
 			transition: opacity 0.2s linear;
 			span {
 				opacity: 1 !important;
