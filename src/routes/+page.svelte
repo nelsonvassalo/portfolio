@@ -70,8 +70,9 @@
 			<div>
 				<S tag="h1">Nelson Vassalo</S>
 				<h2>
-					<S tag="span">Designer</S>
-					<S tag="span">& Developer</S>
+					<S>Designer</S>
+
+					<S>& Developer</S>
 				</h2>
 				<small>&darr;</small>
 			</div>
@@ -179,24 +180,31 @@
 	.intro {
 		width: 100%;
 		height: 100dvh;
+		display: flex;
+		justify-content: end;
 		div {
 			// flex-wrap: wrap;
 			position: relative;
-			justify-content: space-between;
 			text-align: left;
 			line-height: 1;
 			width: 100%;
 			height: 100%;
 			display: flex;
-			flex-direction: column;
+			flex-wrap: wrap;
+			// flex-direction: column;
 			position: relative;
 			// align-items: end;
-			justify-content: end;
+			justify-content: space-between;
 			padding-block: 5.25rem;
 			background: rgba(255, 255, 255, 0.1);
-			// backdrop-filter: blur(50px);
+			backdrop-filter: blur(50px);
 			// position: absolute;
+			align-items: end;
+			align-content: end;
 			z-index: 10;
+		}
+		small {
+			position: sticky;
 		}
 	}
 	.spacer {
