@@ -6,6 +6,7 @@
 	let width;
 	let hoverWidth;
 	let initialWidth;
+	let loaded = false;
 
 	onMount(async () => {
 		let font = new FontFaceObserver('Object Sans', {
@@ -14,9 +15,11 @@
 		font.load().then(async (font) => {
 			console.log({ font });
 			console.log('loaded font');
-			hoverWidth = div.offsetWidth;
+			hoverWidth = div.children[0].offsetWidth;
 			hover = false;
 			await tick();
+			// div.style.display = 'inline-block';
+			loaded = true;
 			initialWidth = div.offsetWidth;
 			console.log('🚀 ~ hoverWidth:', { $$slots, hoverWidth, initialWidth });
 		});
@@ -56,6 +59,7 @@
 	on:mouseleave={leaveHandler}
 	class:hover
 	style:width={width + 'px'}
+	style:display={loaded && 'inline-block'}
 >
 	<span>
 		<slot />
@@ -64,8 +68,8 @@
 
 <style lang="scss">
 	span {
-		display: inline-block;
-		transition: width 0.1s linear;
+		// display: inline-block;
+		transition: width 0.15s;
 		position: relative;
 		cursor: default;
 		span {
