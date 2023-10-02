@@ -37,7 +37,7 @@
 				return t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2;
 			}
 		});
-		lenis.on('scroll', (e) => console.log(e));
+		lenis.on('scroll', (e) => console.log(e.animate.from, e.animate.to, e.animate.value));
 
 		const raf = (time) => {
 			lenis.raf(time);
@@ -78,14 +78,14 @@
 
 			<video src="videos/summit.mp4" autoplay loop muted bind:this={video} />
 		</section>
-		<section class="panel">
-			<article style="background: #fff">
+		<section>
+			<article style="background: #fff" class="about">
 				<h3>
 					One-man shop with 14 years of experience in digital experiences. Crafting culture-aware
 					interactions with a crisp eye for engaging artistic, brand and ecommerce websites.
 				</h3>
 				<aside>
-					<h4>Design + Technology since 2009</h4>
+					<p>Design + Technology since 2009</p>
 					<br />—<br />
 					<ul>
 						<li>Interaction Design</li>
@@ -94,12 +94,13 @@
 					</ul>
 				</aside>
 			</article>
+			<article><h2>Sample projects &darr;</h2></article>
 		</section>
 		<section class="panel">
 			<article class="details">
-				<h3>Multiply</h3>
+				<h4><S tag="span">Multiply</S></h4>
 				<div class="sidebar">
-					<h4>A sleek, fast website for a PR agency moving at the speed of culture.</h4>
+					<h5>A sleek, fast website for a PR agency moving at the speed of culture.</h5>
 					<p>Front-end developer. <br />Made with Zero Studios.</p>
 					<ul class="tags">
 						<li>Sveltekit</li>
@@ -111,16 +112,18 @@
 			<video src="videos/summit.mp4" autoplay loop muted bind:this={video} />
 		</section>
 		<section class="panel">
-			<h3>WOO</h3>
-			<div class="sidebar">
-				<h4>A sleek, fast website for a PR agency moving at the speed of culture.</h4>
-				<p>Front-end developer. <br />Made with Zero Studios.</p>
-				<ul class="tags">
-					<li>Sveltekit</li>
-					<li>Prismic</li>
-					<li>GSAP</li>
-				</ul>
-			</div>
+			<article class="details">
+				<h4><S>WOO</S></h4>
+				<div class="sidebar">
+					<h5>A sleek, fast website for a PR agency moving at the speed of culture.</h5>
+					<p>Front-end developer. <br />Made with Zero Studios.</p>
+					<ul class="tags">
+						<li>Sveltekit</li>
+						<li>Prismic</li>
+						<li>GSAP</li>
+					</ul>
+				</div>
+			</article>
 			<video src="videos/summit.mp4" autoplay loop muted bind:this={video} />
 		</section>
 	</ScrollScene>
@@ -161,28 +164,40 @@
 		line-height: 1.2;
 	}
 
+	h4 {
+		letter-spacing: -0.05em;
+		font-size: 12rem;
+		font-weight: 500;
+	}
+
 	small {
 		font-size: 10.75rem;
 		align-self: flex-end;
 		font-weight: 500;
 	}
 
-	.intro div {
-		// flex-wrap: wrap;
-		justify-content: space-between;
-		text-align: left;
-		line-height: 1;
+	.intro {
 		width: 100%;
-		display: flex;
-		flex-direction: column;
-		position: relative;
-		// align-items: end;
-		justify-content: end;
-		padding-block: 5.25rem;
-		background: rgba(255, 255, 255, 0.1);
-		// backdrop-filter: blur(50px);
-		// position: absolute;
-		z-index: 10;
+		height: 100dvh;
+		div {
+			// flex-wrap: wrap;
+			position: relative;
+			justify-content: space-between;
+			text-align: left;
+			line-height: 1;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			position: relative;
+			// align-items: end;
+			justify-content: end;
+			padding-block: 5.25rem;
+			background: rgba(255, 255, 255, 0.1);
+			// backdrop-filter: blur(50px);
+			// position: absolute;
+			z-index: 10;
+		}
 	}
 	.spacer {
 		height: 50%;
@@ -209,6 +224,10 @@
 		}
 	}
 
+	.about {
+		padding-block: calc(6.5rem);
+	}
+
 	aside {
 		// transform: scale(0.7);
 		padding: 1rem;
@@ -224,14 +243,20 @@
 		grid-template-columns: repeat(12, [col-start] 1fr);
 		padding: 1rem;
 		gap: 20px;
+
+		align-items: baseline;
+		h4 {
+			grid-column: 1 / span 7;
+		}
+
+		.sidebar {
+			grid-column: 9 / span 4;
+		}
+
 		aside {
 			display: block;
 			grid-column: 10 / span 3;
 			width: auto;
 		}
-	}
-
-	.details {
-		grid-template-columns: subgrid;
 	}
 </style>
