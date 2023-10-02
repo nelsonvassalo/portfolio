@@ -67,24 +67,26 @@
 
 	<ScrollScene {header}>
 		<section bind:this={title} class="panel intro">
-			<div>
+			<article>
 				<S tag="h1">Nelson Vassalo</S>
 				<h2>
 					<S>Designer</S>
-
 					<S>& Developer</S>
 				</h2>
 				<small>&darr;</small>
-			</div>
+			</article>
 
 			<video src="videos/summit.mp4" autoplay loop muted bind:this={video} />
 		</section>
-		<section>
-			<article style="background: #fff" class="about">
-				<h3>
-					One-man shop with 14 years of experience in digital experiences. Crafting culture-aware
-					interactions with a crisp eye for engaging artistic, brand and ecommerce websites.
-				</h3>
+		<section class="about">
+			<article style="background: #fff">
+				<div class="text">
+					<h3>
+						One-man shop with 14 years of experience in digital experiences. Crafting culture-aware
+						interactions with a crisp eye for engaging artistic, brand and ecommerce websites.
+					</h3>
+					<h4>Currently available.<br /> Freelance and select roles.</h4>
+				</div>
 				<aside>
 					<p>Design + Technology since 2009</p>
 					<br />—<br />
@@ -95,33 +97,39 @@
 					</ul>
 				</aside>
 			</article>
-			<article><h2>Sample projects &darr;</h2></article>
+			<article class="projects">
+				<h2>Sample projects</h2>
+				<small>&darr;</small>
+			</article>
 		</section>
+
 		<section class="panel">
-			<article class="details">
-				<h4><S tag="span">Multiply</S></h4>
+			<article class="content">
+				<h4 class="text"><S tag="span">Multiply</S></h4>
+
 				<div class="sidebar">
 					<h5>A sleek, fast website for a PR agency moving at the speed of culture.</h5>
 					<p>Front-end developer. <br />Made with Zero Studios.</p>
 					<ul class="tags">
-						<li>Sveltekit</li>
-						<li>Prismic</li>
-						<li>GSAP</li>
+						<li class="pill">Sveltekit</li>
+						<li class="pill">Prismic</li>
+						<li class="pill">GSAP</li>
 					</ul>
 				</div>
 			</article>
 			<video src="videos/summit.mp4" autoplay loop muted bind:this={video} />
 		</section>
 		<section class="panel">
-			<article class="details">
-				<h4><S>WOO</S></h4>
+			<article class="content">
+				<h4 class="text"><S>WOO</S></h4>
+
 				<div class="sidebar">
 					<h5>A sleek, fast website for a PR agency moving at the speed of culture.</h5>
 					<p>Front-end developer. <br />Made with Zero Studios.</p>
 					<ul class="tags">
-						<li>Sveltekit</li>
-						<li>Prismic</li>
-						<li>GSAP</li>
+						<li class="pill">Sveltekit</li>
+						<li class="pill">Prismic</li>
+						<li class="pill">GSAP</li>
 					</ul>
 				</div>
 			</article>
@@ -141,27 +149,11 @@
 		line-height: 1;
 		// display: flex;
 	}
-	h2 {
-		// font-family: /* 'Object Sans', */ 'Nelson Mixed', 'NelsonMixed';
-		font-size: 10rem;
-		letter-spacing: -0.03em;
-		font-weight: 600;
-		margin: 0;
-		line-height: 1;
-		display: flex;
-		width: 7.022em;
-		flex-direction: column;
-		:global(> span:last-child) {
-			align-self: flex-end;
-		}
-		// text-transform: uppercase;
-	}
 
 	h3 {
 		font-size: 3rem;
 		text-indent: 2.7083333333em;
 		font-weight: 300;
-		grid-column: 1 / span 8;
 		line-height: 1.2;
 	}
 
@@ -171,18 +163,33 @@
 		font-weight: 500;
 	}
 
-	small {
-		font-size: 10.75rem;
-		align-self: flex-end;
-		font-weight: 500;
-	}
-
 	.intro {
-		width: 100%;
-		height: 100dvh;
 		display: flex;
 		justify-content: end;
-		div {
+		h2 {
+			// font-family: /* 'Object Sans', */ 'Nelson Mixed', 'NelsonMixed';
+			font-size: 10rem;
+			letter-spacing: -0.03em;
+			font-weight: 600;
+			margin: 0;
+			line-height: 1;
+			display: flex;
+			width: 7.022em;
+			flex-direction: column;
+			:global(> span:last-child) {
+				align-self: flex-end;
+			}
+			// text-transform: uppercase;
+		}
+		small {
+			font-size: 10.75rem;
+			align-self: flex-end;
+			font-weight: 500;
+		}
+		.text {
+			grid-column: 1 / span 8;
+		}
+		article {
 			// flex-wrap: wrap;
 			position: relative;
 			text-align: left;
@@ -203,22 +210,19 @@
 			align-content: end;
 			z-index: 10;
 		}
-		small {
-			position: sticky;
-		}
-	}
-	.spacer {
-		height: 50%;
 	}
 
 	.panel {
 		position: relative;
 		width: 100%;
+		height: 100dvh;
+		overflow: hidden;
 		// min-height: 100%;
 		// top: 0;
 		// left: 0;
 		z-index: 2;
 		// position: absolute;
+
 		// backg§round: #fff;
 		video {
 			width: 100%;
@@ -232,8 +236,33 @@
 		}
 	}
 
+	.projects {
+		justify-content: space-between;
+		text-align: center;
+		display: flex;
+		font-size: 7.5rem;
+		padding-block: 0.5em;
+		background: #fff;
+
+		h2 {
+			font-size: 1em;
+			letter-spacing: -0.04em;
+			font-weight: 300;
+			margin: 0;
+		}
+		small {
+			font-weight: 300;
+			font-size: 1em;
+		}
+	}
+
 	.about {
 		padding-block: calc(6.5rem);
+		h4 {
+			font-size: 2rem;
+			font-weight: 300;
+			letter-spacing: -0.03em;
+		}
 	}
 
 	aside {
@@ -253,18 +282,57 @@
 		gap: 20px;
 
 		align-items: baseline;
-		h4 {
-			grid-column: 1 / span 7;
-		}
-
-		.sidebar {
-			grid-column: 9 / span 4;
-		}
 
 		aside {
 			display: block;
 			grid-column: 10 / span 3;
 			width: auto;
+		}
+
+		.text {
+			grid-column: 1 / span 7;
+		}
+
+		&.content {
+			z-index: 10;
+			height: 100%;
+			position: relative;
+			align-items: center;
+
+			.sidebar {
+				grid-column: 8 / span 5;
+				margin-top: 19.5rem;
+				p {
+					font-size: 1.5rem;
+				}
+				h5 {
+					font-size: 3rem;
+					margin-top: 0;
+					margin-bottom: 0.5em;
+					line-height: normal;
+					font-weight: 500;
+					letter-spacing: -0.02em;
+				}
+			}
+		}
+		ul {
+			list-style: none;
+			padding: 0;
+			&.tags {
+				display: flex;
+				gap: 1rem;
+			}
+			li {
+				list-style: none;
+			}
+		}
+		.pill {
+			font-size: 1.5rem;
+			border: 2px solid currentColor;
+			padding: 0.3em 0.8333em 0.2em;
+			border-radius: 0.8em;
+			display: flex;
+			align-items: center;
 		}
 	}
 </style>
