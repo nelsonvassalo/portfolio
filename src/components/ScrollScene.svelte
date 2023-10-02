@@ -28,17 +28,31 @@
 			const topOffset = video.offsetTop;
 			console.log('🚀 ~ topOffset:', topOffset);
 			console.log(panel.querySelector('video'));
-			gsap.set(video, { bottom: 'auto', y: topOffset });
+			// gsap.set(video, { bottom: 'auto', y: topOffset, top: 0 });
 
-			gsap.to(panel.querySelector('article'), {
-				y: -window.innerHeight + 100,
+			gsap.to(panel.querySelector('article h4, article h1'), {
+				y: -window.innerHeight + 50,
+				ease: 'cubic.easeOut',
 				scrollTrigger: {
 					scrub: true,
 					trigger: panel,
 					markers: true,
 					id: 'article',
-					start: `clamp(15% ${topLimit}`,
-					end: '+=500'
+					start: `top ${topLimit}`,
+					end: '+=1000'
+				}
+			});
+
+			gsap.to(panel.querySelector('article h2, .sidebar'), {
+				y: -window.innerHeight + 50,
+				ease: 'cubic.easeOut',
+				scrollTrigger: {
+					scrub: true,
+					trigger: panel,
+					markers: true,
+					id: 'sidebar',
+					start: `top ${topLimit}`,
+					end: '+=1100'
 				}
 			});
 
@@ -48,11 +62,10 @@
 				scrollTrigger: {
 					scrub: true,
 					trigger: panel,
-					pin: true,
-
-					// endTrigger: video,
+					pin: panel,
+					endTrigger: video,
 					markers: true,
-					// end: '+=200',
+					end: `+=${panel.offsetHeight}`,
 					id: 'panel',
 					// pin: video,
 					start: `top ${topLimit}`
