@@ -15,7 +15,7 @@
 	import vertex from '../code/js/shaders/vertex.glsl';
 	import { onMount } from 'svelte';
 
-	import { scroll } from '../code/js/store';
+	import { scroll, glScale, glY } from '../code/js/store';
 	let canvas;
 
 	$: console.log($scroll);
@@ -33,7 +33,7 @@
 		gl.clearColor(1, 1, 1, 0);
 
 		const scene = new Transform();
-		const fov = 15;
+		const fov = 45;
 
 		const camera = new Camera(gl, { fov, far: 5000 });
 		camera.perspective({ aspect: gl.canvas.width / gl.canvas.height });
@@ -41,14 +41,14 @@
 		const z = (gl.canvas.height / Math.tan((fov * Math.PI) / 360)) * 0.5;
 
 		camera.position.set(0, 0, z);
-		camera.lookAt([0, 0, 0]);
+		// camera.lookAt([0, 0, 0]);
 
-		// function resize() {
-		// 	renderer.setSize(wW, wH);
-		// 	camera.perspective({ aspect: gl.canvas.width / gl.canvas.height });
-		// }
+		function resize() {
+			renderer.setSize(wW, wH);
+			camera.perspective({ aspect: gl.canvas.width / gl.canvas.height });
+		}
 
-		// resize();
+		resize();
 
 		// Triangle that covers viewport, with UVs that still span 0 > 1 across viewport
 		const geometry = new Geometry(gl, {
@@ -81,17 +81,36 @@
 
 		const planeGeom = new Plane(gl);
 
+		const video = document.querySelector('video');
+		const rect = video?.getBoundingClientRect();
+		console.log('🚀 ~ rect:', rect);
 		const plane = new Mesh(gl, { geometry: planeGeom, program });
-		plane.position.set(0, 0, 0);
-		plane.scale.set(640, 360);
+		plane.position.set(0, rect.top, 0);
+		plane.scale.set(rect.width, rect.height);
 		plane.setParent(scene);
 
 		const mesh = new Mesh(gl, { geometry, program });
 
+		window.addEventListener('resize', resize);
+
 		const raf = (time) => {
 			program.uniforms.uTime.value = time * 0.001;
-			plane.position.set(0, $scroll.value || 0, 0);
-			// camera.position.set(0, -$scroll.value * 0.01, z);
+			// plane.position.set(0, $scroll.value * 0.1 || 0, 0);
+			const rect = video?.getBoundingClientRect();
+
+			console.log($glY, $glScale);
+			// const style = window.getComputedStyle(video);
+			// let matrix = new WebKitCSSMatrix(style.transform);
+
+			plane.position.set(
+				rect.x + rect.width * 0.5 - gl?.canvas.width * 0.5,
+				-rect.y - rect.height * 0.5 + gl?.canvas.height * 0.5 + $glY * wH,
+				1.0
+			);
+			console.log({ $glY, $glScale }, rect.width);
+			plane.scale.set(rect?.width * $glScale, rect?.height * $glScale, 1.0);
+
+			camera.position.set(0, -$scroll.value || 0, z);
 			// plane.rotation.y += 0.02;
 
 			renderer.render({ scene, camera });
