@@ -23,7 +23,7 @@
 		const timer = setInterval(() => {
 			date = new Date();
 			getToday();
-		}, 60000);
+		}, 15000);
 		return () => {
 			clearInterval(timer);
 		};
@@ -33,7 +33,7 @@
 <header bind:this={header}>
 	<a href="#">Nelson Vassalo</a>
 	<nav>
-		<S tag="a" className="active">Work</S>
+		<S tag="a" class="active">Projects</S>
 		<S tag="a">Info</S>
 		<S tag="a">Connect</S>
 	</nav>
@@ -78,9 +78,9 @@
 			&:hover {
 				background: #f2f2f2;
 			}
-			&.active {
-				background: #e4e4e4;
-			}
+		}
+		:global(a.active) {
+			background: #e4e4e4;
 		}
 		// font-family: 'Nelson Mixed';
 		// text-transform: uppercase;

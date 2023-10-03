@@ -1,5 +1,6 @@
 <script>
 	import gsap from 'gsap';
+	import { glY, glScale } from '../code/js/store';
 	import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 	import { onMount, tick } from 'svelte';
 
@@ -17,18 +18,18 @@
 
 		// Pinning
 
-		gsap.set('.panel video', { scale: 0.6, y: '15%' });
+		// gsap.set('.panel video', { scale: 0.6, y: '15%' });
 
 		let videoTl;
 
 		let contentTl;
 
-		panels.forEach((panel) => {
+		panels.forEach((panel, i) => {
 			const video = panel.querySelector('video');
 			const topOffset = video.offsetTop;
 			console.log('🚀 ~ topOffset:', topOffset);
 			console.log(panel.querySelector('video'));
-			// gsap.set(video, { bottom: 'auto', y: topOffset, top: 0 });
+			gsap.set(video, { bottom: 'auto', y: 0, top: '+50%' });
 
 			gsap.to(panel.querySelector('article h4, article h1'), {
 				y: -window.innerHeight + 50,
@@ -38,8 +39,18 @@
 					trigger: panel,
 					markers: true,
 					id: 'article',
-					start: `top ${topLimit}`,
+					start: `clamp(top ${topLimit})`,
 					end: '+=1000'
+				}
+			});
+
+			gsap.to(panel.querySelector('article'), {
+				backdropFilter: `blur(0px)`,
+				scrollTrigger: {
+					scrub: true,
+					trigger: panel,
+					start: `top top`,
+					end: `+=${panel.offsetHeight / 2}`
 				}
 			});
 
@@ -51,26 +62,50 @@
 					trigger: panel,
 					markers: true,
 					id: 'sidebar',
-					start: `top ${topLimit}`,
+					start: `clamp(top ${topLimit})`,
 					end: '+=1100'
 				}
 			});
 
-			gsap.to(video, {
-				y: 0,
+			const glElement = {
+				yPercent: 0.15,
+				scale: 0.6
+			};
+
+			gsap.to(glElement, {
+				yPercent: -0.5,
 				scale: 1,
+				onUpdate: () => {
+					glY.set(glElement.yPercent);
+					glScale.set(glElement.scale);
+				},
 				scrollTrigger: {
 					scrub: true,
 					trigger: panel,
 					pin: panel,
-					endTrigger: video,
 					markers: true,
 					end: `+=${panel.offsetHeight}`,
-					id: 'panel',
+					id: 'glElement',
 					// pin: video,
 					start: `top ${topLimit}`
 				}
 			});
+
+			// gsap.to(video, {
+			// 	yPercent: -50,
+			// 	scale: 1,
+			// 	scrollTrigger: {
+			// 		scrub: true,
+			// 		trigger: panel,
+			// 		pin: panel,
+			// 		endTrigger: video,
+			// 		markers: true,
+			// 		end: `+=${panel.offsetHeight}`,
+			// 		id: 'panel',
+			// 		// pin: video,
+			// 		start: `top ${topLimit}`
+			// 	}
+			// });
 
 			// ScrollTrigger.create({
 			// 	trigger: video,

@@ -3,14 +3,13 @@
 	let text;
 	let data;
 	let content;
-	export let tag;
+	export let tag = 'span';
 	export let className;
 
 	$: {
 		data = text?.innerText;
 		if (text) text.innerText = '';
 		if (data) content = Array.from(data);
-		console.log({ content });
 	}
 </script>
 

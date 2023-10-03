@@ -17,6 +17,9 @@
 		RGBAIntegerFormat,
 		sRGBEncoding
 	} from 'three';
+	import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
+	import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
+	import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
 
 	import fragment from '../code/js/shaders/frag.glsl';
 	import vertex from '../code/js/shaders/vertex.glsl';
@@ -59,6 +62,22 @@
 
 		resize();
 
+		const shader = {
+			uniforms: {
+				uTime: {
+					value: 0
+				},
+				tDiffuse: {
+					value: null
+				},
+				uResolution: {
+					value: new Vector2(wW, wH)
+				}
+			},
+			vertexShader: vertex,
+			fragmentShader: fragment
+		};
+
 		// Triangle that covers viewport, with UVs that still span 0 > 1 across viewport
 		// const geometry = new BufferGeometry({
 		// 	position: { size: 2, data: new Float32Array([-1, -1, 3, -1, -1, 3]) },
@@ -87,10 +106,22 @@
 		plane.position.set(0, -rect.top, 0);
 		plane.scale.set(0.6 * 0.05, 0.6 * 0.05, 1.0);
 
+		const composer = new EffectComposer(renderer);
+		composer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+		composer.setSize(wW, wH);
+		const renderPass = new RenderPass(scene, camera);
+		const shaderPass = new ShaderPass(shader);
+
+		shaderPass.enabled = true;
+
+		composer.addPass(renderPass);
+		composer.addPass(shaderPass);
+		// shaderPass.enabled = false;
+
 		window.addEventListener('resize', resize);
 
 		const raf = (time) => {
-			// material.uniforms.uTime.value = time * 0.001;
+			shaderPass.uniforms.uTime.value = time * 0.001;
 
 			const rect = video?.getBoundingClientRect();
 
@@ -109,7 +140,7 @@
 			// camera.position.set(0, -$scroll.value || 0, z);
 			// plane.rotation.y += 0.02;
 
-			renderer.render(scene, camera);
+			composer.render(scene, camera);
 			requestAnimationFrame(raf);
 		};
 		requestAnimationFrame(raf);

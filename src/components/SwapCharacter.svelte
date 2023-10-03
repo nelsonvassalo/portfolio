@@ -13,15 +13,12 @@
 			weight: 700
 		});
 		font.load().then(async (font) => {
-			console.log({ font });
-			console.log('loaded font');
 			hoverWidth = div.children[0].offsetWidth;
 			hover = false;
 			await tick();
 			// div.style.display = 'inline-block';
 			loaded = true;
 			initialWidth = div.offsetWidth;
-			console.log('🚀 ~ hoverWidth:', { $$slots, hoverWidth, initialWidth });
 		});
 
 		// width = div.children[0].clientWidth;
@@ -71,7 +68,7 @@
 		// display: inline-block;
 		transition: width 0.15s;
 		position: relative;
-		cursor: default;
+		// cursor: default;
 		span {
 			display: inline;
 		}
