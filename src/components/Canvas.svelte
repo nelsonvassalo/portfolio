@@ -1,17 +1,54 @@
 <script>
-	import { Renderer, TextureLoader, Mesh, Transform, Program, Box, Geometry, Vec2 } from 'ogl';
+	import {
+		Renderer,
+		TextureLoader,
+		Mesh,
+		Transform,
+		Program,
+		Box,
+		Geometry,
+		Vec2,
+		Plane,
+		Camera
+	} from 'ogl';
 	import fragment from '../code/js/shaders/frag.glsl';
 	import vertex from '../code/js/shaders/vertex.glsl';
 	import { onMount } from 'svelte';
+
+	import { scroll } from '../code/js/store';
 	let canvas;
 
+	$: console.log($scroll);
+
 	onMount(() => {
+		const wW = window.innerWidth;
+		const wH = window.innerHeight;
 		const renderer = new Renderer({
-			width: window.innerWidth,
-			height: window.innerHeight
+			width: wW,
+			height: wH
 		});
 		const gl = renderer.gl;
 		canvas.appendChild(gl.canvas);
+
+		gl.clearColor(1, 1, 1, 0);
+
+		const scene = new Transform();
+		const fov = 15;
+
+		const camera = new Camera(gl, { fov, far: 5000 });
+		camera.perspective({ aspect: gl.canvas.width / gl.canvas.height });
+
+		const z = (gl.canvas.height / Math.tan((fov * Math.PI) / 360)) * 0.5;
+
+		camera.position.set(0, 0, z);
+		camera.lookAt([0, 0, 0]);
+
+		// function resize() {
+		// 	renderer.setSize(wW, wH);
+		// 	camera.perspective({ aspect: gl.canvas.width / gl.canvas.height });
+		// }
+
+		// resize();
 
 		// Triangle that covers viewport, with UVs that still span 0 > 1 across viewport
 		const geometry = new Geometry(gl, {
@@ -22,19 +59,42 @@
 
 		const program = new Program(gl, {
 			vertex,
-			fragment,
+			fragment: /* glsl */ `
+                precision highp float;
+
+                varying vec3 vNormal;
+
+                void main() {
+                    vec3 normal = normalize(vNormal);
+                    float lighting = dot(normal, normalize(vec3(-0.3, 0.8, 0.6)));
+                    gl_FragColor.rgb = vec3(0., 0., 1.0) + lighting * 0.1;
+                    gl_FragColor.a = 1.0;
+                }
+            `,
+
+			cullFace: null,
 			uniforms: {
 				uTime: { value: 0 },
-				uResolution: { value: new Vec2(window.innerWidth, window.innerHeight) }
+				uResolution: { value: new Vec2(wW, wH) }
 			}
 		});
+
+		const planeGeom = new Plane(gl);
+
+		const plane = new Mesh(gl, { geometry: planeGeom, program });
+		plane.position.set(0, 0, 0);
+		plane.scale.set(640, 360);
+		plane.setParent(scene);
 
 		const mesh = new Mesh(gl, { geometry, program });
 
 		const raf = (time) => {
 			program.uniforms.uTime.value = time * 0.001;
+			plane.position.set(0, $scroll.value || 0, 0);
+			// camera.position.set(0, -$scroll.value * 0.01, z);
+			// plane.rotation.y += 0.02;
 
-			renderer.render({ scene: mesh });
+			renderer.render({ scene, camera });
 			requestAnimationFrame(raf);
 		};
 		requestAnimationFrame(raf);
