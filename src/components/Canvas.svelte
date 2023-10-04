@@ -15,7 +15,10 @@
 		LinearFilter,
 		RGB_ETC1_Format,
 		RGBAIntegerFormat,
-		sRGBEncoding
+		sRGBEncoding,
+		Clock,
+		SRGBColorSpace,
+		ColorManagement
 	} from 'three';
 	import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 	import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
@@ -25,7 +28,7 @@
 	import vertex from '../code/js/shaders/vertex.glsl';
 	import RoundedRect from '../code/js/RoundedRectangle';
 
-	import { scroll, glScale, glY } from '../code/js/store';
+	import { scroll, glScale, glY, amplitude, blur } from '../code/js/store';
 	import RoundedRectangle from '../code/js/RoundedRectangle';
 	let canvas;
 
@@ -40,11 +43,14 @@
 		console.log('🚀 ~ renderer:', renderer);
 		renderer.setSize(wW, wH);
 
+		renderer.outputColorSpace = SRGBColorSpace;
+
 		let vec = new Vector2();
 
 		canvas.appendChild(renderer.domElement);
 
-		renderer.setClearColor(0xfff, 0);
+		renderer.setClearColor(0xffffff, 1);
+		ColorManagement.enabled = true;
 
 		const scene = new Scene();
 		const fov = 55;
@@ -72,6 +78,12 @@
 				},
 				uResolution: {
 					value: new Vector2(wW, wH)
+				},
+				uAmt: {
+					value: 0
+				},
+				uBlur: {
+					value: 0
 				}
 			},
 			vertexShader: vertex,
@@ -88,23 +100,23 @@
 		const video = document.querySelector('video');
 
 		const videoTex = new VideoTexture(video);
-		videoTex.encoding = sRGBEncoding;
-		// videoTex.minFilter = LinearFilter;
-		// videoTex.magFilter = LinearFilter;
-		// videoTex.format = RGBAIntegerFormat;
+		videoTex.colorSpace = SRGBColorSpace;
+		videoTex.minFilter = LinearFilter;
+		videoTex.magFilter = LinearFilter;
+		// videoTex.format = SRGBColorSpace;
 
 		const material = new MeshBasicMaterial({ map: videoTex });
 
 		const rect = video?.getBoundingClientRect();
 
 		// const planeGeom = new PlaneGeometry(1, 1);
-		const planeGeom = new RoundedRect(rect.width, rect.height, 10, 64);
-		console.log('🚀 ~ rect:', rect);
+		const planeGeom = new RoundedRect(rect.width * 1.366666, rect.height * 1.3666, 10, 64);
+		console.log('🚀 ~ rect FIRST RENDER', rect.width);
 		const plane = new Mesh(planeGeom, material);
 
 		scene.add(plane);
-		plane.position.set(0, -rect.top, 0);
-		plane.scale.set(0.6 * 0.05, 0.6 * 0.05, 1.0);
+		// plane.position.set(0, -rect.top, 0);
+		// plane.scale.set(0.6, 0.6, 1.0);
 
 		const composer = new EffectComposer(renderer);
 		composer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -112,7 +124,7 @@
 		const renderPass = new RenderPass(scene, camera);
 		const shaderPass = new ShaderPass(shader);
 
-		shaderPass.enabled = true;
+		shaderPass.enabled = false;
 
 		composer.addPass(renderPass);
 		composer.addPass(shaderPass);
@@ -120,10 +132,15 @@
 
 		window.addEventListener('resize', resize);
 
+		const clock = new Clock();
 		const raf = (time) => {
-			shaderPass.uniforms.uTime.value = time * 0.001;
+			const newTime = clock.getElapsedTime();
+			shaderPass.uniforms.uTime.value = newTime;
+			shaderPass.uniforms.uAmt.value = $amplitude;
+			shaderPass.uniforms.uBlur.value = $blur;
 
 			const rect = video?.getBoundingClientRect();
+			console.log('🚀 ~ rect SUBSEQUENT', rect.width);
 
 			// console.log($glY, $glScale);
 			// const style = window.getComputedStyle(video);
@@ -131,10 +148,10 @@
 
 			plane.position.set(
 				rect.x + rect.width * 0.5 - renderer.getSize(vec).x * 0.5,
-				-rect.y - rect.height * 0.5 + renderer.getSize(vec).y * 0.5 + $glY * -wH,
+				-rect.y - rect.height + renderer.getSize(vec).y * 0.5 + $glY * -renderer.getSize(vec).y,
 				1.0
 			);
-			console.log({ $glY, $glScale }, rect.width);
+			// // console.log({ $glY, $glScale }, rect.width);
 			plane.scale.set($glScale, $glScale, 1.0);
 
 			// camera.position.set(0, -$scroll.value || 0, z);
