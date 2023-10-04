@@ -1,8 +1,10 @@
 <script>
 	import gsap from 'gsap';
-	import { glY, glScale } from '../code/js/store';
+	import { glY, glScale, amplitude, hblur, vblur, kernel } from '../code/js/store';
 	import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 	import { onMount, tick } from 'svelte';
+	import clamp from '../code/js/clamp';
+	import lerp from '../code/js/lerp';
 
 	export let headerIn;
 	let topLimit;
@@ -18,7 +20,7 @@
 
 		// Pinning
 
-		// gsap.set('.panel video', { scale: 0.6, y: '15%' });
+		gsap.set('.panel video', { scale: 0.6, y: '15%' });
 
 		let videoTl;
 
@@ -45,12 +47,12 @@
 			});
 
 			gsap.to(panel.querySelector('article'), {
-				backdropFilter: `blur(0px)`,
+				backgroundColor: 'transparent',
 				scrollTrigger: {
 					scrub: true,
 					trigger: panel,
 					start: `top top`,
-					end: `+=${panel.offsetHeight / 2}`
+					end: `+=${panel.offsetHeight / 4}`
 				}
 			});
 
@@ -67,45 +69,50 @@
 				}
 			});
 
-			const glElement = {
-				yPercent: 0.15,
-				scale: 0.6
-			};
-
-			gsap.to(glElement, {
-				yPercent: -0.5,
+			gsap.to(video, {
+				yPercent: -50,
 				scale: 1,
-				onUpdate: () => {
-					glY.set(glElement.yPercent);
-					glScale.set(glElement.scale);
-				},
 				scrollTrigger: {
 					scrub: true,
 					trigger: panel,
 					pin: panel,
+					endTrigger: video,
 					markers: true,
-					end: `+=${panel.offsetHeight}`,
-					id: 'glElement',
+					end: `+=${panel.offsetHeight * 1.5}`,
+					id: 'panel',
 					// pin: video,
-					start: `top ${topLimit}`
+					start: `top ${topLimit}`,
+					onUpdate: (timeline) => {
+						amplitude.set(clamp(lerp(0, 0.02, 0.8 - timeline.progress), 0, 0.02));
+						hblur.set(
+							clamp(
+								lerp(
+									0,
+									(2.0 / window.innerWidth) * window.devicePixelRatio,
+									0.8 - timeline.progress
+								),
+								0,
+								2.0
+							)
+						);
+						vblur.set(
+							clamp(
+								lerp(
+									0,
+									(5.0 / window.innerWidth) * window.devicePixelRatio,
+									0.8 - timeline.progress
+								),
+								0,
+								5.0
+							)
+						);
+						kernel.set(lerp(5, 35, 1.0 - timeline.progress));
+						glY.set(gsap.getProperty(video, 'yPercent') * 0.01);
+						glScale.set(gsap.getProperty(video, 'scale'));
+						console.log({ $kernel });
+					}
 				}
 			});
-
-			// gsap.to(video, {
-			// 	yPercent: -50,
-			// 	scale: 1,
-			// 	scrollTrigger: {
-			// 		scrub: true,
-			// 		trigger: panel,
-			// 		pin: panel,
-			// 		endTrigger: video,
-			// 		markers: true,
-			// 		end: `+=${panel.offsetHeight}`,
-			// 		id: 'panel',
-			// 		// pin: video,
-			// 		start: `top ${topLimit}`
-			// 	}
-			// });
 
 			// ScrollTrigger.create({
 			// 	trigger: video,

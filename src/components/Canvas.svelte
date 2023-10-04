@@ -4,31 +4,39 @@
 	import {
 		WebGLRenderer,
 		Mesh,
-		BufferGeometry,
 		Vector2,
 		Scene,
 		PerspectiveCamera,
 		MeshBasicMaterial,
-		PlaneGeometry,
-		DoubleSide,
 		VideoTexture,
 		LinearFilter,
-		RGB_ETC1_Format,
-		RGBAIntegerFormat,
 		sRGBEncoding,
 		Clock,
 		SRGBColorSpace,
-		ColorManagement
+		ColorManagement,
+		WebGLRenderTarget,
+		ShaderMaterial
 	} from 'three';
+	// import {
+	// 	EffectComposer,
+	// 	KawaseBlurPass,
+	// 	ShaderPass,
+	// 	RenderPass,
+	// 	GaussianBlurPass
+	// } from 'postprocessing';
+
 	import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 	import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 	import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
+	import { HorizontalBlurShader } from 'three/examples/jsm/shaders/HorizontalBlurShader';
+	import { VerticalBlurShader } from 'three/examples/jsm/shaders/VerticalBlurShader';
 
 	import fragment from '../code/js/shaders/frag.glsl';
 	import vertex from '../code/js/shaders/vertex.glsl';
+	import blurFrag from '../code/js/shaders/blurFrag.glsl';
 	import RoundedRect from '../code/js/RoundedRectangle';
 
-	import { scroll, glScale, glY, amplitude, blur } from '../code/js/store';
+	import { scroll, glScale, glY, amplitude, hblur, vblur, kernel } from '../code/js/store';
 	import RoundedRectangle from '../code/js/RoundedRectangle';
 	let canvas;
 
@@ -69,6 +77,7 @@
 		resize();
 
 		const shader = {
+			defines: { LABEL: 'value' },
 			uniforms: {
 				uTime: {
 					value: 0
@@ -83,6 +92,9 @@
 					value: 0
 				},
 				uBlur: {
+					value: 0
+				},
+				uMouse: {
 					value: 0
 				}
 			},
@@ -107,10 +119,12 @@
 
 		const material = new MeshBasicMaterial({ map: videoTex });
 
+		const shaderMaterial = new ShaderMaterial(shader);
+
 		const rect = video?.getBoundingClientRect();
 
 		// const planeGeom = new PlaneGeometry(1, 1);
-		const planeGeom = new RoundedRect(rect.width * 1.366666, rect.height * 1.3666, 10, 64);
+		const planeGeom = new RoundedRect(rect.width * 1.666666, rect.height * 1.66666, 10, 64);
 		console.log('🚀 ~ rect FIRST RENDER', rect.width);
 		const plane = new Mesh(planeGeom, material);
 
@@ -119,28 +133,67 @@
 		// plane.scale.set(0.6, 0.6, 1.0);
 
 		const composer = new EffectComposer(renderer);
+		// const composer = new TEC(renderer);
 		composer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 		composer.setSize(wW, wH);
 		const renderPass = new RenderPass(scene, camera);
-		const shaderPass = new ShaderPass(shader);
+		// const blurPass = new GaussianBlurPass({
+		// 	iterations: 12,
+		// 	kernelSize: 24,
+		// 	resolutionX: wW * 2
+		// });
+		const HBlurPass = new ShaderPass({
+			...HorizontalBlurShader,
+			uniforms: {
+				...HorizontalBlurShader.uniforms,
+				h: {
+					value: (2.0 / wW) * window.devicePixelRatio
+				}
+			}
+		});
+		const VBlurPass = new ShaderPass({
+			...VerticalBlurShader,
+			uniforms: {
+				...VerticalBlurShader.uniforms,
+				v: {
+					value: (2.0 / wW) * window.devicePixelRatio
+				}
+			}
+		});
+		const shaderPass = new ShaderPass(shaderMaterial, 'tDiffuse');
 
-		shaderPass.enabled = false;
+		// shaderPass.enabled = false;
 
 		composer.addPass(renderPass);
+		composer.addPass(HBlurPass);
+		composer.addPass(VBlurPass);
 		composer.addPass(shaderPass);
 		// shaderPass.enabled = false;
 
 		window.addEventListener('resize', resize);
+		console.log({ canvas });
+		window.addEventListener('mousemove', (e) => {
+			shaderMaterial.uniforms.uMouse.value = e.x / wW;
+		});
 
 		const clock = new Clock();
+
+		const iterations = 8;
+		const fbo1 = new WebGLRenderTarget(wW, wH);
+		const fbo2 = new WebGLRenderTarget(wW, wH);
+
 		const raf = (time) => {
 			const newTime = clock.getElapsedTime();
-			shaderPass.uniforms.uTime.value = newTime;
-			shaderPass.uniforms.uAmt.value = $amplitude;
-			shaderPass.uniforms.uBlur.value = $blur;
+			shaderMaterial.uniforms.uTime.value = newTime;
+			shaderMaterial.uniforms.uAmt.value = $amplitude;
+
+			HBlurPass.uniforms.h.value = $hblur;
+			VBlurPass.uniforms.v.value = $vblur;
+			// blurPass.iterations = $blur;
+			// blurPass.kernelSize = $kernel;
 
 			const rect = video?.getBoundingClientRect();
-			console.log('🚀 ~ rect SUBSEQUENT', rect.width);
+			// console.log('🚀 ~ rect SUBSEQUENT', rect.width);
 
 			// console.log($glY, $glScale);
 			// const style = window.getComputedStyle(video);

@@ -66,7 +66,8 @@
 <style lang="scss">
 	span {
 		// display: inline-block;
-		transition: width 0.15s;
+		transition: width 1.7s cubic-bezier(0.075, 0.82, 0.165, 1);
+
 		position: relative;
 		// cursor: default;
 		span {
@@ -76,7 +77,7 @@
 			// max-width: 100px;
 			// width: 80px;
 			font-weight: 700;
-			transition: opacity 0.2s linear;
+			transition: opacity 0.7s linear;
 			span {
 				opacity: 1 !important;
 			}
