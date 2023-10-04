@@ -7,12 +7,34 @@
 	let hoverWidth;
 	let initialWidth;
 	let loaded = false;
+	let spans;
+	export let trigger = null;
+	export let hovering = false;
+	export let mouseover = false;
+	export let stagger = 0;
+
+	$: {
+		if (trigger == 'hover' || trigger) {
+			if (hovering) {
+				setTimeout(() => {
+					div.style.fontWeight = '700';
+				}, stagger * 1000);
+			} else {
+				setTimeout(() => {
+					div.style.fontWeight = '500';
+				}, stagger * 2000);
+			}
+		}
+	}
 
 	onMount(async () => {
-		let font = new FontFaceObserver('Object Sans', {
+		let font1 = new FontFaceObserver('Object Sans');
+		let font2 = new FontFaceObserver('Object Sans', {
 			weight: 700
 		});
-		font.load().then(async (font) => {
+		const promises = [font1.load(), font2.load()];
+
+		Promise.all(promises).then(async (font) => {
 			hoverWidth = div.children[0].offsetWidth;
 			hover = false;
 			await tick();
@@ -52,8 +74,8 @@
 
 <span
 	bind:this={div}
-	on:mouseenter={hoverHandler}
-	on:mouseleave={leaveHandler}
+	on:mouseenter={!trigger && hoverHandler}
+	on:mouseleave={!trigger && leaveHandler}
 	class:hover
 	style:width={width + 'px'}
 	style:display={loaded && 'inline-block'}

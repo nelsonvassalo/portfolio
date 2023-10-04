@@ -3,8 +3,10 @@
 	import moment from 'moment-timezone';
 	import S from '../components/SwapWord.svelte';
 	import Ticker from '../components/SpotifyTicker.svelte';
+	import A from '../components/AnimatedWord.svelte';
 
-	let today;
+	let todayLIS;
+	let todayNYC;
 	let date;
 	export let header;
 
@@ -15,7 +17,8 @@
 		};
 		function getToday() {
 			date = moment();
-			today = date.tz('Europe/Lisbon').format('HH:mm');
+			todayLIS = date.tz('Europe/Lisbon').format('HH:mm');
+			todayNYC = date.tz('America/New_York').format('h:mm');
 		}
 
 		getToday();
@@ -33,16 +36,14 @@
 <header bind:this={header}>
 	<a href="#">Nelson Vassalo</a>
 	<nav>
-		<S tag="a" class="active">Projects</S>
-		<S tag="a">Info</S>
-		<S tag="a">Connect</S>
+		<A tag="a" class="active" triggerType="hover">Projects</A>
+		<A tag="a" triggerType="hover">Info</A>
+		<A tag="a" triggerType="hover">Connect</A>
 	</nav>
-	{#if today}
+	{#if todayLIS}
 		<aside>
-			<time datetime={today}>LIS {today}</time>
-			<time datetime={date.tz('America/New_York').format('HH:mm')}
-				>NYC {date.tz('America/New_York').format('h:mm')}</time
-			>
+			<time datetime={todayLIS}>LIS {todayLIS}</time>
+			<time datetime={date.tz('America/New_York').format('HH:mm')}>NYC {todayNYC}</time>
 		</aside>
 	{/if}
 	<!-- <Ticker /> -->
@@ -71,7 +72,7 @@
 		padding: 0.15em;
 		:global(a) {
 			padding: 0.7em 1.5em 0.6em;
-			display: inline-block;
+			display: inline-flex;
 			border-radius: 4px;
 			cursor: pointer;
 			// margin-right: 1em;

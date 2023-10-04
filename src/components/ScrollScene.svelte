@@ -39,7 +39,7 @@
 				scrollTrigger: {
 					scrub: true,
 					trigger: panel,
-					markers: true,
+					// markers: true,
 					id: 'article',
 					start: `clamp(top ${topLimit})`,
 					end: '+=1000'
@@ -62,7 +62,7 @@
 				scrollTrigger: {
 					scrub: true,
 					trigger: panel,
-					markers: true,
+					// markers: true,
 					id: 'sidebar',
 					start: `clamp(top ${topLimit})`,
 					end: '+=1100'
@@ -77,7 +77,7 @@
 					trigger: panel,
 					pin: panel,
 					endTrigger: video,
-					markers: true,
+					// markers: true,
 					end: `+=${panel.offsetHeight * 1.5}`,
 					id: 'panel',
 					// pin: video,
