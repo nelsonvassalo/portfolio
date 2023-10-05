@@ -14,14 +14,14 @@
 	export let stagger = 0;
 
 	$: {
-		if (trigger == 'hover' || trigger) {
+		if (trigger == ('hover' || 'scroll')) {
 			if (hovering) {
 				setTimeout(() => {
-					div.style.fontWeight = '700';
+					hoverHandler();
 				}, stagger * 1000);
 			} else {
 				setTimeout(() => {
-					div.style.fontWeight = '500';
+					leaveHandler();
 				}, stagger * 2000);
 			}
 		}

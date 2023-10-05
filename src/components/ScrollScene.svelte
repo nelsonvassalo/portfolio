@@ -83,7 +83,7 @@
 					// pin: video,
 					start: `top ${topLimit}`,
 					onUpdate: (timeline) => {
-						amplitude.set(clamp(lerp(0, 0.02, 0.8 - timeline.progress), 0, 0.02));
+						amplitude.set(clamp(lerp(0, 0.02, 0.65 - timeline.progress), 0, 0.02));
 						hblur.set(
 							clamp(
 								lerp(
@@ -106,7 +106,7 @@
 								5.0
 							)
 						);
-						kernel.set(lerp(5, 35, 1.0 - timeline.progress));
+
 						glY.set(gsap.getProperty(video, 'yPercent') * 0.01);
 						glScale.set(gsap.getProperty(video, 'scale'));
 						console.log({ $kernel });

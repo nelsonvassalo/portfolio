@@ -40,8 +40,6 @@
 	import RoundedRectangle from '../code/js/RoundedRectangle';
 	let canvas;
 
-	$: console.log($scroll);
-
 	onMount(() => {
 		const wW = window.innerWidth;
 		const wH = window.innerHeight;

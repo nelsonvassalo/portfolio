@@ -20,8 +20,6 @@
 		if (text) text.innerText = '';
 		if (data) content = Array.from(data);
 
-		if (content) setAnimations();
-
 		if (triggerType == 'hover') {
 			if (hover) {
 				animateIn();
@@ -34,9 +32,6 @@
 		}
 	}
 
-	const setAnimations = async () => {
-		// console.log('setting anims', text.querySelectorAll('span'));
-	};
 	const animateIn = () => {
 		hovering = true;
 	};
@@ -46,13 +41,28 @@
 
 	onMount(async () => {
 		await tick();
-		let trigger;
 
-		if (triggerType == 'scroll')
-			trigger = new ScrollTrigger({
+		gsap.registerPlugin(ScrollTrigger);
+		if (triggerType == 'scroll') {
+			hovering = true;
+			// justHovered = true;
+			// gsap.to(text, {
+			// 	scrollTrigger: {
+			// 		trigger: text,
+			// 		markers: true,
+
+			// 	}
+			// });
+			ScrollTrigger.create({
 				trigger: text,
-				markers: true
+				markers: true,
+				start: 'top center',
+				end: '+=1300',
+				onLeave: () => {
+					hovering = false;
+				}
 			});
+		}
 	});
 </script>
 

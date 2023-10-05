@@ -114,7 +114,7 @@
 			</article>
 		</section>
 		<section class="projects">
-			<A tag="h2" triggerType="scroll">Projects</A>
+			<h2>Projects</h2>
 			<small>&darr;</small>
 		</section>
 
@@ -235,17 +235,17 @@
 		text-align: center;
 		display: flex;
 		font-size: 17rem;
-		padding-block-start: 0.5em;
-		padding-block-end: 0;
+		padding-block: 0.125em;
+		// padding-block-end: 0;
 		// background: #fff;
 
 		:global(h2) {
 			font-size: 1em;
 			letter-spacing: -0.04em;
-			font-weight: 700;
+			font-weight: 500;
 			margin: 0;
 			margin-left: auto;
-			letter-spacing: -0.02em;
+			letter-spacing: -0.05em;
 		}
 		small {
 			font-weight: 300;
