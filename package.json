@@ -12,9 +12,11 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
+		"@rodneylab/sveltekit-components": "^3.0.0",
 		"@rollup/plugin-inject": "^5.0.3",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.20.4",
+		"@zerodevx/svelte-img": "^2.1.0",
 		"buffer": "^6.0.3",
 		"eslint": "^8.28.0",
 		"eslint-config-prettier": "^8.5.0",
@@ -33,9 +35,15 @@
 	"type": "module",
 	"dependencies": {
 		"@studio-freight/lenis": "^1.0.23",
+		"fontfaceobserver": "^2.3.0",
 		"gsap": "^3.12.2",
 		"html2canvas": "^1.4.1",
 		"moment-timezone": "^0.5.43",
-		"ogl": "^1.0.0"
+		"ogl": "^1.0.0",
+		"postprocessing": "^6.33.2",
+		"svelte-img": "^0.4.0",
+		"three": "^0.157.0",
+		"vanilla-lazyload": "^17.8.4",
+		"vite-imagetools": "^5.0.8"
 	}
 }

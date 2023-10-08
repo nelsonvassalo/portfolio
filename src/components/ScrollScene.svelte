@@ -109,7 +109,6 @@
 
 						glY.set(gsap.getProperty(video, 'yPercent') * 0.01);
 						glScale.set(gsap.getProperty(video, 'scale'));
-						console.log({ $kernel });
 					}
 				}
 			});

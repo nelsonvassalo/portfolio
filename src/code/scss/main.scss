@@ -1,35 +1,4 @@
-@font-face {
-    font-family: 'Object Sans';
-    font-weight: 300;
-    src: local('Object Sans Light'),
-        url('../../fonts/ObjectSans-Light.woff2') format('woff2'),
-        url('../../fonts/ObjectSans-Light.woff') format('woff');
-}
-
-@font-face {
-    font-family: 'Object Sans';
-    font-weight: 500;
-    src: local('Object Sans Regular'),
-        url('../../fonts/ObjectSans-Regular.woff2') format('woff2'),
-        url('../../fonts/ObjectSans-Regular.woff') format('woff');
-}
-
-@font-face {
-    font-family: 'Object Sans';
-    font-weight: 600;
-    src: local('Object Sans Medium'),
-        url('../../fonts/ObjectSans-Medium.woff2') format('woff2'),
-        url('../../fonts/ObjectSans-Medium.woff') format('woff');
-}
-
-@font-face {
-    font-family: 'Object Sans';
-    font-weight: 700;
-    src: local('Object Sans Bold'),
-        url('../../fonts/ObjectSans-Bold.woff2') format('woff2'),
-        url('../../fonts/ObjectSans-Bold.woff') format('woff');
-}
-
+@import 'fonts';
 
 
 * {
@@ -40,9 +9,4 @@ body {
     font-family: 'Object Sans';
     font-weight: 500;
     margin: 0;
-}
-
-main {
-    padding: .5rem;
-    height: 100vh
 }

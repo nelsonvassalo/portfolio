@@ -17,7 +17,6 @@
 		els.forEach((el, i) => {
 			console.log(el);
 			gsap.set(el, { autoAlpha: 0, top: 0, yPercent: 100, position: 'absolute' });
-			console.log('el 0', els[0]);
 			if (i === 0) {
 				gsap.fromTo(
 					els[0],
@@ -41,7 +40,6 @@
 		if (i > els.length - 1) {
 			i = 0;
 		}
-		console.log('🚀 ~ i++:', i);
 		// console.log('🚀 ~ wrapped:', wrapped);
 		let prevI = i == 0 ? els.length - 1 : i - 1;
 		gsap.to(els[prevI], {
@@ -115,7 +113,7 @@
 		width: 22rem;
 		position: absolute;
 		right: 1rem;
-		cursor: context-menu;
+		cursor: url('images/cursor.png'), auto;
 		:global(> *) {
 			padding: 0.65em 0 0.6em;
 		}

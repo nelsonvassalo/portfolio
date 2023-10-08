@@ -4,7 +4,6 @@ const now_playing_endpoint = `https://api.spotify.com/v1/me/player/recently-play
 
 export async function GET() {
     const { access_token } = await fetch('http://localhost:5173/song/access').then(res => res.json())
-    console.log("🚀 ~ access_token:", access_token)
 
     const res = await fetch(`${now_playing_endpoint}?limit=1`, {
         headers: {

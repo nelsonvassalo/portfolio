@@ -14,6 +14,8 @@
 	export let tag = 'span';
 	export let triggerType;
 	export let className;
+	export let isActive;
+	export let href = tag === 'a' ? href : false;
 
 	$: {
 		let data = text?.innerText;
@@ -23,11 +25,10 @@
 		if (triggerType == 'hover') {
 			if (hover) {
 				animateIn();
-				justHovered = true;
 			}
 			if (!hover && justHovered) {
+				justHovered = true;
 				animateOut();
-				justHovered = false;
 			}
 		}
 	}
@@ -37,6 +38,7 @@
 	};
 	const animateOut = () => {
 		hovering = false;
+		justHovered = false;
 	};
 
 	onMount(async () => {
@@ -70,8 +72,11 @@
 	this={tag}
 	bind:this={text}
 	class={className}
+	class:active={isActive}
 	on:mouseenter={animateIn}
 	on:mouseleave={animateOut}
+	on:click
+	{href}
 >
 	<slot />
 	{#if content}
@@ -85,5 +90,9 @@
 	span {
 		display: inline;
 		width: auto;
+	}
+	a {
+		color: #000;
+		text-decoration: none;
 	}
 </style>

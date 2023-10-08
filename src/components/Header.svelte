@@ -1,16 +1,47 @@
 <script>
 	import Ticker from './Ticker.svelte';
 	import A from '../components/AnimatedWord.svelte';
+	import NavItem from '../components/NavItem.svelte';
+	import { activeNav } from '../code/js/store';
+	import { onMount } from 'svelte';
 
 	export let header;
+	let checkActive;
+	let isActive;
+	const navElements = [
+		{
+			id: 'Projects',
+			target: '#projects'
+		},
+		{
+			id: 'Info',
+			target: '#info'
+		},
+		{
+			id: 'Connect',
+			target: '#connect'
+		}
+	];
+
+	onMount(() => {
+		navElements.forEach((el) => {});
+	});
+
+	$: {
+		console.log($activeNav);
+		checkActive = (i) => {
+			console.log('check active', i, i === $activeNav);
+			return i === $activeNav;
+		};
+	}
 </script>
 
 <header bind:this={header}>
 	<a href="#">Nelson Vassalo</a>
 	<nav>
-		<A tag="a" class="active" triggerType="hover">Projects</A>
-		<A tag="a" triggerType="hover">Info</A>
-		<A tag="a" triggerType="hover">Connect</A>
+		{#each navElements as el, i}
+			<NavItem id={el.id} target={el.target} isActive={checkActive(i)} />
+		{/each}
 	</nav>
 	<Ticker />
 </header>
