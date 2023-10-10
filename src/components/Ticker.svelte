@@ -103,7 +103,7 @@
 			>{todayNYC} EST</time
 		>
 	{/if}
-	<LastSong bind:div={els[2]} />
+	<!-- <LastSong bind:div={els[2]} /> -->
 </aside>
 
 <style lang="scss">
@@ -115,7 +115,7 @@
 		width: 22rem;
 		position: absolute;
 		right: 1rem;
-		cursor: url('images/cursor.png'), auto;
+		cursor: url('/images/cursor.png'), auto;
 		:global(> *) {
 			padding: 0.65em 0 0.6em;
 		}
