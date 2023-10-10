@@ -30,7 +30,6 @@
 	import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 	import { HorizontalBlurShader } from 'three/examples/jsm/shaders/HorizontalBlurShader.js';
 	import { VerticalBlurShader } from 'three/examples/jsm/shaders/VerticalBlurShader.js';
-	import * as THREE from "../node_modules/three/build/three.module.js
 
 	import fragment from '../code/js/shaders/frag.glsl';
 	import vertex from '../code/js/shaders/vertex.glsl';
