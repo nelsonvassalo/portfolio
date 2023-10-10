@@ -12,6 +12,7 @@
 	let els = [];
 	let i = 0;
 	let tickerTimer;
+	let interval;
 
 	$: {
 		els.forEach((el, i) => {
@@ -35,6 +36,7 @@
 		});
 	}
 	function advanceOne() {
+		interval = i == 1 ? 10000 : 4000;
 		clearInterval(tickerTimer);
 		i++;
 		if (i > els.length - 1) {
@@ -65,7 +67,7 @@
 	function reStartTimer() {
 		tickerTimer = setInterval(() => {
 			advanceOne();
-		}, 4000);
+		}, interval);
 	}
 
 	onMount(() => {
@@ -85,7 +87,7 @@
 		tickerTimer = setInterval(() => {
 			advanceOne();
 			console.log('🚀 ~ prevI:', prevI);
-		}, 4000);
+		}, 5000);
 
 		return () => {
 			clearInterval(dateTimer);
@@ -96,9 +98,9 @@
 
 <aside on:click={advanceOne}>
 	{#if date}
-		<time datetime={todayLIS} bind:this={els[0]}>LIS {todayLIS}</time>
-		<time datetime={date.tz('America/New_York').format('HH:mm')} bind:this={els[1]}
-			>NYC {todayNYC}</time
+		<time datetime={todayLIS} bind:this={els[0]}>{todayLIS} GMT</time>
+		<time datetime={date.tz('America/New_York').format('HH:mm A')} bind:this={els[1]}
+			>{todayNYC} EST</time
 		>
 	{/if}
 	<LastSong bind:div={els[2]} />

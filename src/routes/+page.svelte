@@ -4,8 +4,7 @@
 	import Lenis from '@studio-freight/lenis';
 	import html2canvas from 'html2canvas';
 	import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
-
-	import { scroll, activeNav } from '../code/js/store';
+	import { scroll, activeNav, lenisStore } from '../code/js/store';
 	import S from '../components/SwapWord.svelte';
 	import Header from '../components/Header.svelte';
 	import ScrollScene from '../components/ScrollScene.svelte';
@@ -19,6 +18,7 @@
 	let loading = true;
 	let main;
 	let ulWidth;
+	let lenis;
 
 	onMount(() => {
 		setTimeout(() => {
@@ -35,31 +35,7 @@
 		// 	title.querySelector('small').style.display = 'none';
 		// });
 
-		ScrollTrigger.create({
-			trigger: '#projects',
-			start: 'bottom top',
-			end: document.getElementById('projects').offsetHeight,
-			markers: true,
-			onToggle: ({ isActive }) => {
-				console.log('toggle projects', { isActive });
-				isActive ? ($activeNav = 0) : ($activeNav = null);
-			}
-		});
-
-		ScrollTrigger.create({
-			trigger: '#info',
-			start: 'bottom top',
-			end: document.getElementById('info').offsetHeight,
-			markers: true,
-			onToggle: ({ isActive }) => ($activeNav = 1),
-			onLeaveBack: ({ isActive }) => ($activeNav = 0)
-
-			// onEnterBack: () => {
-			// 	$activeNav = 1;
-			// }
-		});
-
-		const lenis = new Lenis({
+		lenis = new Lenis({
 			// duration: 2,
 			// lerp: 1
 			easing: (t) => {
@@ -67,7 +43,8 @@
 			}
 		});
 		lenis.on('scroll', (e) => {
-			scroll.set(e.animate);
+			ScrollTrigger.update();
+			$scroll = e.animate;
 			// console.log(e.animate.from, e.animate.to, e.animate.value)
 		});
 
@@ -83,6 +60,9 @@
 			lenis.destroy();
 		};
 	});
+	$: {
+		$lenisStore = lenis;
+	}
 </script>
 
 <Header bind:header />
@@ -150,12 +130,12 @@
 				image="/images/multiply.jpg"
 				tags={['Sveltekit', 'Prismic', 'GSAP']}
 			/>
-			<ProjectRow
+			<!-- <ProjectRow
 				title="Guayaki"
 				role="Front-end development.<br/>Made with Zero Studios."
 				image="/images/guayaki.jpg"
 				tags={['Shopify', 'GSAP']}
-			/>
+			/> -->
 			<ProjectRow
 				title="WOO"
 				role="Strategy, design & development. <br />Archive"
@@ -192,32 +172,58 @@
 				tags={['GSAP', 'Three.js']}
 				image="/images/blackframe.jpg"
 			/>
+			<article class="content clients" style="--width: -{ulWidth}px">
+				<h3>Clients</h3>
+				<div>
+					<ul bind:offsetWidth={ulWidth}>
+						<li><a href="" />Art Directors Club</li>
+						<li><a href="" />Paul Institute Records</li>
+						<li><a href="" />BaseDesign</li>
+						<li><a href="" />Karlssonwilker</li>
+						<li><a href="" />NOS</li>
+						<li><a href="" />Get Golden</li>
+						<li><a href="" />SUPA</li>
+						<li><a href="" />Pony Earth</li>
+					</ul>
+					<ul>
+						<li><a href="" />Art Directors Club</li>
+						<li><a href="" />Paul Institute Records</li>
+						<li><a href="" />BaseDesign</li>
+						<li><a href="" />Karlssonwilker</li>
+						<li><a href="" />NOS</li>
+						<li><a href="" />Get Golden</li>
+						<li><a href="" />SUPA</li>
+						<li><a href="" />Pony Earth</li>
+					</ul>
+				</div>
+			</article>
 		</section>
 		<section id="info" class="info">
-			<div>
-				<h2>Info</h2>
-				<small>i</small>
-			</div>
 			<article class="resume content">
 				<div class="resume-content">
 					<p>
+						With a background in graphic design and a former student of the MFA Design + Technology
+						at Parsons School of Design, I merge both fields for digital experiences that bring
+						delight.
+					</p>
+					<p>
+						I have been designing and developing digital artifacts for over 13 years, both as a
+						freelancer collaborating in cultural, brand and product/D2C projects and as part of
+						focused creative studios.<br />
+					</p>
+					<p>
 						Based in Lisbon, Brooklyn, and always on the web.<br />
-						I have a background in graphic design and was a student of the MFA Design + Technology at
-						Parsons School of Design. I fuse the two fields thorougly for consistent digital experiences
-						founded on sharp visuals and interactions.
-					</p>
-					<p>
-						I have been designing and developing experiences for over 13 years, both as a freelancer
-						collaborating in cultural, brand and product/D2C projects and a full-time team player
-						for focused creative studios.
-					</p>
-					<p>
 						Previously at <a href="https://dresscodeny.com/" target="_blank">Dress Code</a>,
 						<a href="https://forofficeuseonly.com/" target="_blank">For Office Use Only</a>,
 						<a href="https://zero.nyc/" target="_blank">Zero Studios</a>.
 					</p>
 				</div>
+				<div class="portrait">
+					<img src="/images/photo.jpg" alt="" />
+				</div>
+			</article>
 
+			<article class="content stack">
 				<section class="references">
 					<h3>References</h3>
 					<ul>
@@ -264,34 +270,6 @@
 						</li>
 					</ul>
 				</section>
-			</article>
-
-			<article class="content clients" style="--width: -{ulWidth}px">
-				<h3>Clients</h3>
-				<div>
-					<ul bind:offsetWidth={ulWidth}>
-						<li><a href="" />Art Directors Club (One Club)</li>
-						<li><a href="" />Paul Institute Records</li>
-						<li><a href="" />BaseDesign</li>
-						<li><a href="" />Karlssonwilker</li>
-						<li><a href="" />NOS</li>
-						<li><a href="" />Get Golden</li>
-						<li><a href="" />SUPA</li>
-						<li><a href="" />Pony Earth</li>
-					</ul>
-					<ul>
-						<li><a href="" />Art Directors Club (One Club)</li>
-						<li><a href="" />Paul Institute Records</li>
-						<li><a href="" />BaseDesign</li>
-						<li><a href="" />Karlssonwilker</li>
-						<li><a href="" />NOS</li>
-						<li><a href="" />Get Golden</li>
-						<li><a href="" />SUPA</li>
-						<li><a href="" />Pony Earth</li>
-					</ul>
-				</div>
-			</article>
-			<article class="content stack">
 				<h3>Stack</h3>
 
 				<ul>
@@ -306,13 +284,23 @@
 				</ul>
 
 				<ul>
-					<li>Sanity.io</li>
+					<li>Contentful</li>
 					<li>Shopify</li>
 					<li>Prismic</li>
 					<li>Wordpress</li>
 				</ul>
 				<section class="content colophon">
-					<p>Used on this site</p>
+					<h3>Colophon</h3>
+
+					<ul>
+						<li>Sveltekit</li>
+						<li>Three.js + custom GLSL</li>
+						<li>GSAP</li>
+						<li>Lenis Scroll</li>
+						<li>SASS</li>
+						<li>Spotify API</li>
+					</ul>
+					<p>Fonts</p>
 
 					<ul>
 						<li>
@@ -322,13 +310,28 @@
 						</li>
 						<li>Custom pixel drawing font</li>
 					</ul>
-					<ul>
-						<li>Sveltekit</li>
-						<li>Three.js + custom GLSL</li>
-						<li>SASS</li>
-					</ul>
 				</section>
 			</article>
+		</section>
+		<section id="connect" class="connect">
+			<div class="contact-detail">
+				<small>Email</small>
+				<A tag="a" triggerType="hover" href="mailto:mail@nelsonvassalo.com" target="_blank"
+					>mail (at) nelsonvassalo.com</A
+				>
+			</div>
+			<div class="contact-detail">
+				<small>Instagram</small>
+				<A tag="a" triggerType="hover" href="http://instagram.com/nelson_vassalo" target="_blank"
+					>@nelson_vassalo</A
+				>
+			</div>
+			<footer>
+				<ul>
+					<li><a href="">GitHub</a></li>
+					<li><a href="">LinkedIn</a></li>
+				</ul>
+			</footer>
 		</section>
 	</ScrollScene>
 </main>
@@ -445,6 +448,43 @@
 
 	.projects {
 		padding-block-end: 6.5rem;
+		.clients {
+			padding-block: 3.5rem;
+			border-bottom: 2px solid #000;
+			> div {
+				width: calc(100% + 2rem);
+				margin-left: -1rem;
+				overflow: hidden;
+			}
+			h3 {
+				text-align: center;
+				margin-bottom: 1.5em;
+			}
+			div {
+				display: flex;
+			}
+			ul {
+				display: flex;
+				animation: 30s ticker linear infinite;
+				column-gap: 6rem;
+				align-items: center;
+				flex-wrap: nowrap;
+				margin: 0;
+				padding-left: 0;
+				flex: auto 0 0;
+				padding-right: 6rem;
+				li {
+					max-width: 390px;
+					font-size: 3rem;
+					list-style-type: none;
+					// flex: 25vw 0 0;
+					text-align: center;
+					line-height: 1;
+					font-weight: 500;
+					letter-spacing: -0.05em;
+				}
+			}
+		}
 	}
 	.projects,
 	.info {
@@ -475,25 +515,6 @@
 				font-size: 1em;
 				margin-left: auto;
 			}
-		}
-	}
-
-	.info > div {
-		align-items: center;
-		small {
-			border: 2px solid #000;
-			border-radius: 100px;
-			aspect-ratio: 1;
-			height: 9rem;
-			font-size: 0.5em;
-			display: flex;
-			justify-content: center;
-			flex: auto 0 0;
-			animation: 6s rotate infinite cubic-bezier(0.68, -0.55, 0.265, 1.55);
-			width: auto;
-			align-items: center;
-			font-weight: 600;
-			padding-top: 0.2em;
 		}
 	}
 
@@ -538,7 +559,33 @@
 			display: grid;
 			grid-template-columns: repeat(12, 1fr);
 			column-gap: 1rem;
-			padding-block-end: 6.5rem;
+			padding-block: 6.5rem;
+			border-bottom: 2px solid #000;
+			h3 {
+				display: flex;
+				column-gap: 1rem;
+				align-items: center;
+			}
+			> div {
+				align-items: center;
+
+				small {
+					border: 2px solid #000;
+					border-radius: 100px;
+					aspect-ratio: 1;
+					height: 2.5rem;
+					width: 2.5rem;
+					font-size: 1.5rem;
+					display: flex;
+					justify-content: center;
+					// flex: auto 0 0;
+					animation: 6s rotate infinite cubic-bezier(0.68, -0.55, 0.265, 1.55);
+					align-items: center;
+					font-weight: 600;
+					padding-top: 0.2em;
+				}
+			}
+
 			.resume-content {
 				grid-column: 1 / span 8;
 				a {
@@ -547,26 +594,16 @@
 					color: inherit;
 				}
 			}
-			.references {
-				grid-column: 10 / span 3;
-				h3 {
-					font-size: 1.5rem;
-				}
-				ul {
-					padding: 0;
-					list-style: none;
-					line-height: 1.25;
-					a {
-						font-weight: 600;
-						font-size: 1rem;
-						text-decoration: none;
-						color: inherit;
-					}
+
+			.portrait {
+				grid-column: 9 / span 4;
+				img {
+					width: 100%;
 				}
 			}
 
 			p {
-				font-size: 1.5rem;
+				font-size: 2rem;
 				text-indent: 2.7083333333em;
 				line-height: 1.25;
 				font-weight: 300;
@@ -583,42 +620,7 @@
 				translate: var(--width);
 			}
 		}
-		.clients {
-			padding-block: 3.5rem;
-			background: #000;
-			margin-left: -1rem;
-			width: calc(100% + 2rem);
-			overflow: hidden;
-			color: #fff;
-			h3 {
-				text-align: center;
-				margin-bottom: 1.5em;
-			}
-			div {
-				display: flex;
-			}
-			ul {
-				display: flex;
-				animation: 30s ticker linear infinite;
-				column-gap: 6rem;
-				align-items: center;
-				flex-wrap: nowrap;
-				margin: 0;
-				padding-left: 0;
-				flex: auto 0 0;
-				padding-right: 6rem;
-				li {
-					max-width: 390px;
-					font-size: 3rem;
-					list-style-type: none;
-					// flex: 25vw 0 0;
-					text-align: center;
-					line-height: 1;
-					font-weight: 500;
-					letter-spacing: -0.05em;
-				}
-			}
-		}
+
 		ul li {
 			font-size: 1.25rem;
 		}
@@ -626,30 +628,57 @@
 		.stack {
 			grid-template-columns: repeat(12, 1fr);
 			grid-template-rows: 67px auto;
+			column-gap: 2rem;
+			border-bottom: 2px solid #000;
 
 			display: grid;
 			padding-block: 6.5rem;
 			h3 {
-				grid-column: 1 / 9;
-				grid-row: 1 / -1;
+				grid-column: 4 / 9;
+				grid-row: 1 / 2;
 			}
 			ul {
 				padding: 0;
 				list-style: none;
+				line-height: 1.3;
 			}
 			ul {
-				grid-row: 2 / 3;
+				grid-row: 2 / -1;
+				margin: 0;
 			}
 			ul:first-of-type {
-				grid-column: 1 / span 4;
+				grid-column: 4 / span 3;
 			}
 			ul:nth-of-type(2) {
-				grid-column: 5 / span 4;
+				grid-column: 7 / span 3;
+			}
+
+			.references {
+				grid-column: 1 / span 3;
+				// h3 {
+				// 	font-size: 1.5rem;
+				// }
+				ul {
+					padding: 0;
+					list-style: none;
+
+					a {
+						font-weight: 600;
+						// font-size: 1rem;
+						text-decoration: none;
+						color: inherit;
+					}
+				}
 			}
 
 			.colophon {
-				grid-column: 9 / span 4;
-				grid-row: 2/3;
+				grid-column: 10 / span 3;
+				grid-row: 1/3;
+				a {
+					text-decoration: none;
+					font-weight: 600;
+					color: inherit;
+				}
 				h4 {
 					font-size: 2rem;
 					font-weight: 300;
@@ -659,6 +688,78 @@
 				h5 {
 					font-size: 1.5rem;
 					font-weight: 500;
+				}
+			}
+		}
+	}
+	.connect {
+		background: #000;
+		letter-spacing: -0.05em;
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+		justify-content: center;
+		padding-block: 6.5rem;
+		gap: 2rem;
+		color: #fff;
+		position: relative;
+
+		h3 {
+			font-size: 2.5rem;
+			text-align: center;
+			margin-block: 0;
+			letter-spacing: -0.05em;
+		}
+
+		.contact-detail {
+			display: flex;
+			flex-flow: column wrap;
+			justify-content: center;
+			align-items: start;
+			height: 100%;
+			:global(a:hover) {
+				// color: #000;
+				// background: #fff;
+
+				box-shadow: inset #fff 8px 0px, inset #fff 0px 8px, inset #fff -8px 0, inset #fff 0 -8px;
+			}
+			:global(a) {
+				font-size: 4.75rem;
+				color: #fff;
+				letter-spacing: -0.03em;
+				transition: box-shadow 0.2s ease;
+
+				font-weight: 500;
+				border: 3px solid #fff;
+				padding: 0.4em 1em;
+				border-radius: 0.605em;
+			}
+			small {
+				font-size: 1.25rem;
+				margin: 0.5em 1.5em;
+			}
+		}
+		footer {
+			margin-top: auto;
+			position: absolute;
+			bottom: 0;
+			left: 1em;
+			background: #fff;
+			color: #000;
+			// border-top: 1px solid #fff;
+			// width: calc(100% - 2em);
+			width: 100%;
+			padding: 1rem;
+			ul {
+				padding: 0;
+				margin: 0;
+				display: flex;
+				list-style: none;
+				gap: 1rem;
+				a {
+					text-decoration: none;
+					color: inherit;
+					font-weight: 600;
 				}
 			}
 		}

@@ -1,7 +1,8 @@
 <script>
 	let video;
 	import S from '../components/SwapWord.svelte';
-	import { Image } from '@rodneylab/sveltekit-components';
+
+	import Image from 'svelte-image';
 
 	export let role;
 	export let title;
@@ -12,7 +13,7 @@
 </script>
 
 <section>
-	<a href={link} target="_blank" class="content">
+	<svelte:element this={link ? 'a' : 'div'} href={link} target="_blank" class="content">
 		<h4 class="text"><S tag="span">{title}</S></h4>
 
 		<div class="role">
@@ -26,22 +27,26 @@
 
 		<img src={image} />
 		<div class="arrow">
-			<div class="icon">
-				<svg
-					width="45"
-					height="43"
-					viewBox="0 0 45 43"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
-				>
-					<path
-						d="M44.1334 1.03684L44.4456 30.8145L40.1526 34.8886L39.9965 8.22201L39.8403 8.07386L3.54461 42.5182L0.422395 39.5553L36.7181 5.11091L36.562 4.96276L8.4621 4.81461L12.7551 0.740551L44.1334 1.03684Z"
-						fill="black"
-					/>
-				</svg>
-			</div>
+			{#if link}
+				<div class="icon">
+					<svg
+						width="45"
+						height="43"
+						viewBox="0 0 45 43"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path
+							d="M44.1334 1.03684L44.4456 30.8145L40.1526 34.8886L39.9965 8.22201L39.8403 8.07386L3.54461 42.5182L0.422395 39.5553L36.7181 5.11091L36.562 4.96276L8.4621 4.81461L12.7551 0.740551L44.1334 1.03684Z"
+							fill="black"
+						/>
+					</svg>
+				</div>
+			{:else}
+				Under request
+			{/if}
 		</div>
-	</a>
+	</svelte:element>
 </section>
 
 <style lang="scss">
@@ -106,6 +111,7 @@
 			transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 			z-index: 20;
 			border-radius: 10px;
+			pointer-events: none;
 		}
 		ul {
 			list-style: none;

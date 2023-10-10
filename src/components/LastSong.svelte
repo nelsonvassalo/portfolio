@@ -1,8 +1,11 @@
 <script>
 	import { json } from '@sveltejs/kit';
-	import { onMount } from 'svelte';
+	import { afterUpdate, onMount, tick } from 'svelte';
 	import A from './AnimatedWord.svelte';
 	let song;
+	let width;
+	let inner;
+	let expanded;
 	export let div;
 
 	async function getNowPlaying() {
@@ -22,6 +25,13 @@
 			clearInterval(interval);
 		};
 	});
+
+	$: {
+		console.log({ width });
+		if (width > 352 && !expanded) {
+			expanded = true;
+		}
+	}
 </script>
 
 <div bind:this={div}>
@@ -33,28 +43,73 @@
 	</svg>
 
 	{#if song}
-		<a href={song.track.external_urls.spotify} target="_blank">
-			{song.track?.name},
-			{#each song.track?.artists as artist, i}
-				{artist.name}{#if i < song.track.artists.length - 1},&nbsp; {/if}
-			{/each}
-			<svg
-				width="11"
-				height="11"
-				viewBox="0 0 11 11"
-				fill="none"
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<path
-					d="M9.47534 8.52468L9.4415 2.43223L9.40765 2.39838L1.53822 10.2678L0.861282 9.59087L8.73071 1.72144L8.69686 1.68759L2.6044 1.65375L3.53519 0.722953L10.3384 0.790647L10.4061 7.59389L9.47534 8.52468Z"
-					fill="black"
-				/>
-			</svg>
+		<a
+			href={song.track.external_urls.spotify}
+			target="_blank"
+			class:expanded
+			style={`--width: -${width}px`}
+		>
+			<span bind:this={inner} bind:clientWidth={width}>
+				{song.track?.name},
+				{#each song.track?.artists as artist, i}
+					{#if i < 2}
+						{artist.name}{#if i < 1},&nbsp; {/if}
+					{/if}
+				{/each}
+				{#if song.track.artists.length > 2}
+					and others
+				{/if}
+				<svg
+					width="11"
+					height="11"
+					viewBox="0 0 11 11"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<path
+						d="M9.47534 8.52468L9.4415 2.43223L9.40765 2.39838L1.53822 10.2678L0.861282 9.59087L8.73071 1.72144L8.69686 1.68759L2.6044 1.65375L3.53519 0.722953L10.3384 0.790647L10.4061 7.59389L9.47534 8.52468Z"
+						fill="black"
+					/>
+				</svg>
+			</span>
+			{#if expanded}
+				<span>
+					{song.track?.name},
+					{#each song.track?.artists as artist, i}
+						{#if i < 2}
+							{artist.name}{#if i < 1},&nbsp; {/if}
+						{/if}
+					{/each}
+					{#if song.track.artists.length > 2}
+						and others
+					{/if}
+					<svg
+						width="11"
+						height="11"
+						viewBox="0 0 11 11"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path
+							d="M9.47534 8.52468L9.4415 2.43223L9.40765 2.39838L1.53822 10.2678L0.861282 9.59087L8.73071 1.72144L8.69686 1.68759L2.6044 1.65375L3.53519 0.722953L10.3384 0.790647L10.4061 7.59389L9.47534 8.52468Z"
+							fill="black"
+						/>
+					</svg>
+				</span>
+			{/if}
 		</a>
 	{/if}
 </div>
 
 <style lang="scss">
+	@keyframes ticker {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			transform: translateX(var(--width));
+		}
+	}
 	div {
 		display: flex;
 		width: 100%;
@@ -65,7 +120,8 @@
 
 		> svg {
 			margin-right: 0.5em;
-			width: 13px;
+			// width: 13px;
+			flex-shrink: 0;
 		}
 		a {
 			text-decoration: none;
@@ -73,9 +129,37 @@
 			font-weight: 600;
 			letter-spacing: -0.03em;
 			overflow: hidden;
-			text-overflow: ellipsis;
+			// text-overflow: ellipsis;
 			height: 1lh;
 			white-space: nowrap;
+			span {
+				display: inline-block;
+			}
+			&.expanded {
+				display: flex;
+				position: relative;
+				&:before,
+				&:after {
+					content: '';
+					width: 40px;
+					height: 100%;
+					background: linear-gradient(to right, white, transparent);
+					position: absolute;
+					top: 0;
+					z-index: 1;
+				}
+				&:before {
+					left: 0;
+				}
+				&:after {
+					transform: rotate(180deg);
+					right: 0;
+				}
+				span {
+					animation: 13s ticker linear infinite;
+					padding-right: 1rem;
+				}
+			}
 			svg {
 				width: 10px;
 			}

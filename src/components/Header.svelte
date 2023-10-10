@@ -2,13 +2,15 @@
 	import Ticker from './Ticker.svelte';
 	import A from '../components/AnimatedWord.svelte';
 	import NavItem from '../components/NavItem.svelte';
-	import { activeNav } from '../code/js/store';
+	import { activeNav, navItems } from '../code/js/store';
 	import { onMount } from 'svelte';
+	import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
+	import gsap from 'gsap';
 
 	export let header;
 	let checkActive;
 	let isActive;
-	const navElements = [
+	$navItems = [
 		{
 			id: 'Projects',
 			target: '#projects'
@@ -23,10 +25,6 @@
 		}
 	];
 
-	onMount(() => {
-		navElements.forEach((el) => {});
-	});
-
 	$: {
 		console.log($activeNav);
 		checkActive = (i) => {
@@ -39,7 +37,7 @@
 <header bind:this={header}>
 	<a href="#">Nelson Vassalo</a>
 	<nav>
-		{#each navElements as el, i}
+		{#each $navItems as el, i}
 			<NavItem id={el.id} target={el.target} isActive={checkActive(i)} />
 		{/each}
 	</nav>
@@ -71,6 +69,8 @@
 	nav {
 		// padding: 1em;
 		padding: 0.15em;
+		display: flex;
+		gap: 0.15em;
 
 		:global(a) {
 			padding: 0.7em 1.5em 0.6em;

@@ -11,11 +11,13 @@
 	let justHovered = false;
 	let hover = false;
 	let hovering;
+	let className;
 	export let tag = 'span';
 	export let triggerType;
-	export let className;
+	export { className as class };
 	export let isActive;
 	export let href = tag === 'a' ? href : false;
+	export let target;
 
 	$: {
 		let data = text?.innerText;
@@ -76,6 +78,7 @@
 	on:mouseenter={animateIn}
 	on:mouseleave={animateOut}
 	on:click
+	{target}
 	{href}
 >
 	<slot />

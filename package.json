@@ -27,7 +27,9 @@
 		"sass": "^1.66.1",
 		"svelte": "^4.0.5",
 		"svelte-check": "^3.4.3",
+		"svelte-image": "^0.2.9",
 		"svelte-preprocess": "^5.0.4",
+		"svimg": "^3.2.0",
 		"typescript": "^5.0.0",
 		"vite": "^4.4.2",
 		"vite-plugin-glsl": "^1.1.2"

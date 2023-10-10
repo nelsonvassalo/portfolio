@@ -1,8 +1,17 @@
 <script>
 	import gsap from 'gsap';
-	import { glY, glScale, amplitude, hblur, vblur, kernel } from '../code/js/store';
+	import {
+		glY,
+		glScale,
+		amplitude,
+		hblur,
+		vblur,
+		kernel,
+		navItems,
+		activeNav
+	} from '../code/js/store';
 	import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
-	import { onMount, tick } from 'svelte';
+	import { afterUpdate, onMount, tick } from 'svelte';
 	import clamp from '../code/js/clamp';
 	import lerp from '../code/js/lerp';
 
@@ -11,20 +20,14 @@
 
 	onMount(async () => {
 		gsap.registerPlugin(ScrollTrigger);
+		gsap.ticker.lagSmoothing(0);
 
-		await tick();
 		console.log({ headerIn });
 		let topLimit = headerIn?.getBoundingClientRect().height;
 
 		const panels = gsap.utils.toArray('.panel');
 
-		// Pinning
-
 		gsap.set('.panel video', { scale: 0.6, y: '15%' });
-
-		let videoTl;
-
-		let contentTl;
 
 		panels.forEach((panel, i) => {
 			const video = panel.querySelector('video');
@@ -118,6 +121,34 @@
 			// 	pin: true,
 			// 	end: '+=1000'
 			// });
+		});
+
+		await tick();
+		// ScrollTrigger.refresh();
+
+		$navItems?.forEach((nav, i) => {
+			console.log({ nav }, document.querySelector(nav.target).getBoundingClientRect().top);
+			ScrollTrigger.create({
+				trigger: nav.target,
+				start: 'top bottom',
+				end: 'bottom center',
+				// markers: true,
+				id: nav.id,
+				onEnterBack: () => {
+					$activeNav = i;
+				},
+				onEnter: () => {
+					$activeNav = i;
+					console.log({ $activeNav, i });
+				},
+				onLeaveBack: () => {
+					if (i == 0) $activeNav = null;
+				}
+
+				// onEnterBack: () => {
+				// 	$activeNav = 1;
+				// }
+			});
 		});
 
 		// gsap.to('.panel', {

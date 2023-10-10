@@ -22,7 +22,7 @@
 			} else {
 				setTimeout(() => {
 					leaveHandler();
-				}, stagger * 2000);
+				}, stagger * 1000);
 			}
 		}
 	}
