@@ -103,7 +103,7 @@
 			>{todayNYC} EST</time
 		>
 	{/if}
-	<!-- <LastSong bind:div={els[2]} /> -->
+	<LastSong bind:div={els[2]} />
 </aside>
 
 <style lang="scss">
