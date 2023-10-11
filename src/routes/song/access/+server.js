@@ -3,7 +3,7 @@ import { json } from "@sveltejs/kit";
 const client_id = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
 const client_secret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
 const refresh_token = import.meta.env.VITE_SPOTIFY_REFRESH_TOKEN;
-const redirect_uri = "http://localhost:5173/"
+const redirect_uri = "http://nelsonvassalo.vercel.app"
 const token_endpoint = `https://accounts.spotify.com/api/token`;
 
 export const GET = async () => {
