@@ -3,7 +3,7 @@ import { json } from "@sveltejs/kit";
 const now_playing_endpoint = `https://api.spotify.com/v1/me/player/recently-played`;
 
 export async function GET() {
-    const { access_token } = await fetch('http://localhost:5173/song/access').then(res => res.json())
+    const { access_token } = await fetch('http://nelsonvassalo.vercel.app/song/access').then(res => res.json())
 
     const res = await fetch(`${now_playing_endpoint}?limit=1`, {
         headers: {
