@@ -371,6 +371,25 @@
 </main>
 
 <style lang="scss">
+	@media screen and (max-width: 48rem) {
+		:global(body:before) {
+			content: 'Nelson Vassalo \a Designer & Developer\a \a Best seen on a desktop';
+			background-color: #000;
+			color: #fff;
+			font-size: 2rem;
+			position: fixed;
+			z-index: 20;
+			top: 0;
+			left: 0;
+			height: 100%;
+			display: flex;
+			width: 100vw;
+			padding: 1rem;
+			white-space: pre-wrap;
+			font-weight: 600;
+		}
+	}
+
 	@keyframes rotate {
 		from {
 			rotate: 0deg;
