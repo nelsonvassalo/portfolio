@@ -1,18 +1,20 @@
 <script>
 	import '../code/scss/main.scss';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import Lenis from '@studio-freight/lenis';
 	import html2canvas from 'html2canvas';
 	import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
-	import { scroll, activeNav, lenisStore } from '../code/js/store';
+	import { scroll, activeNav, lenisStore, fontsLoaded } from '../code/js/store';
 	import S from '../components/SwapWord.svelte';
 	import Header from '../components/Header.svelte';
 	import ScrollScene from '../components/ScrollScene.svelte';
 	import Canvas from '../components/Canvas.svelte';
 	import ProjectRow from '../components/ProjectRow.svelte';
 	import A from '../components/AnimatedWord.svelte';
+	import FontFaceObserver from 'fontfaceobserver';
 
 	let video;
+	let videoPlay;
 	let header;
 	let title;
 	let loading = true;
@@ -21,9 +23,24 @@
 	let lenis;
 
 	onMount(() => {
-		setTimeout(() => {
+		// setTimeout(() => {
+		// 	loading = false;
+		// }, 300);
+		let font1 = new FontFaceObserver('Object Sans');
+		let font2 = new FontFaceObserver('Object Sans', {
+			weight: 700
+		});
+		$fontsLoaded = [font1, font2];
+		console.log('🚀 ~ fontsLoaded:', $fontsLoaded);
+
+		videoPlay = video?.play();
+		const promises = [...$fontsLoaded, videoPlay];
+
+		Promise.all(promises).then(async () => {
+			await tick();
 			loading = false;
-		}, 300);
+		});
+
 		// html2canvas(title, {
 		// 	backgroundColor: null
 		// }).then((canvas) => {
@@ -38,9 +55,9 @@
 		lenis = new Lenis({
 			// duration: 2,
 			// lerp: 1
-			easing: (t) => {
-				return t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2;
-			}
+			// easing: (t) => {
+			// 	return t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2;
+			// }
 		});
 		lenis.on('scroll', (e) => {
 			ScrollTrigger.update();
@@ -68,15 +85,14 @@
 <Header bind:header />
 
 <Canvas />
-<main bind:this={main}>
+<main bind:this={main} class:loading>
 	{#if loading}
-		<section style="background: black; position: fixed; width: 100%; height: 100%; top: 0; left: 0">
-			Loading
+		<section class="loader">
+			<p>Loading</p>
 		</section>
-	{/if}
-	<!-- <h1>Nelson Vassalo</h1>
+		<!-- <h1>Nelson Vassalo</h1>
 	<h2>Designer & Developer</h2> -->
-
+	{/if}
 	<ScrollScene headerIn={header}>
 		<section bind:this={title} class="panel intro">
 			<article>
@@ -345,6 +361,20 @@
 			rotate: 360deg;
 		}
 	}
+	.loader {
+		font-size: 2rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background: black;
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		z-index: 10;
+		color: #fff;
+	}
 	:global(h1) {
 		// font-family: /* 'Object Sans',  */ 'Nelson Mixed', 'NelsonMixed';
 		font-weight: 600;
@@ -361,10 +391,55 @@
 		font-weight: 300;
 		line-height: 1.2;
 	}
+	.loading .container {
+		transform: translateY(100vh);
+		transition: transform 0.5s ease;
+	}
+
+	.container {
+		transform: none;
+	}
+
+	.panel {
+		position: relative;
+		width: 100%;
+		min-height: 100vh;
+		// overflow: hidden;
+		// visibility: hidden;
+		padding: 1rem;
+
+		// min-height: 100%;
+		// top: 0;
+		// left: 0;
+		z-index: 2;
+		// position: absolute;
+
+		// backg§round: #fff;
+		article {
+			background: rgba(255, 255, 255, 0.5);
+			// backdrop-filter: blur(50px);
+		}
+		video {
+			visibility: hidden;
+			opacity: 0.5;
+			width: calc(100% - 2rem);
+			border-radius: 0.5rem;
+			align-self: flex-start;
+			// padding: 1rem;
+			// transform: scale(0.6);
+			transform-origin: 50% 100%;
+			position: absolute;
+			bottom: 0;
+			left: 1rem;
+			// position: sticky;
+			// margin-bottom: -2rem;
+		}
+	}
 
 	.intro {
 		display: flex;
 		justify-content: end;
+		padding: 0;
 		h2 {
 			// font-family: /* 'Object Sans', */ 'Nelson Mixed', 'NelsonMixed';
 			font-size: 10rem;
@@ -402,47 +477,11 @@
 			position: relative;
 			// align-items: end;
 			justify-content: space-between;
-			padding-block: 5.25rem;
+			padding: 5.25rem 1rem;
 			// position: absolute;
 			align-items: end;
 			align-content: end;
 			z-index: 10;
-		}
-	}
-
-	.panel {
-		position: relative;
-		width: 100%;
-		min-height: 100vh;
-		// overflow: hidden;
-		// visibility: hidden;
-		padding: 1rem;
-
-		// min-height: 100%;
-		// top: 0;
-		// left: 0;
-		z-index: 2;
-		// position: absolute;
-
-		// backg§round: #fff;
-		article {
-			background: rgba(255, 255, 255, 0.5);
-			// backdrop-filter: blur(50px);
-		}
-		video {
-			visibility: hidden;
-			opacity: 0.5;
-			width: calc(100% - 2rem);
-			border-radius: 0.5rem;
-			align-self: flex-start;
-			// padding: 1rem;
-			// transform: scale(0.6);
-			transform-origin: 50% 100%;
-			position: absolute;
-			bottom: 0;
-			left: 1rem;
-			// position: sticky;
-			// margin-bottom: -2rem;
 		}
 	}
 
