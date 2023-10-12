@@ -365,8 +365,13 @@
 			</div>
 			<footer>
 				<ul>
-					<li><a href="">GitHub</a></li>
-					<li><a href="">LinkedIn</a></li>
+					<li><a href="https://github.com/nelsonvassalo" target="_blank">GitHub</a></li>
+					<li><a href="https://www.linkedin.com/in/vassalo/" target="_blank">LinkedIn</a></li>
+					<li>
+						<a href="https://workingnotworking.com/15214-nelson" target="_blank"
+							>Working Not Working</a
+						>
+					</li>
 				</ul>
 			</footer>
 		</section>

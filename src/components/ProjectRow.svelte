@@ -25,7 +25,7 @@
 			{/each}
 		</ul>
 
-		<img src={image} loading="lazy" />
+		<img src={image} loading="lazy" width="1280" height="719" />
 		<div class="arrow">
 			{#if link}
 				<div class="icon">
