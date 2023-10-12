@@ -125,8 +125,7 @@
 					<h4>Available for November.<br /> Freelance and select roles.</h4>
 				</div>
 				<aside>
-					<p>Design + Technology since 2009</p>
-					<br />—<br />
+					<p>Design + Technology<br /> since 2009 <br />—</p>
 					<ul>
 						<li>Interaction Design</li>
 						<li>Frontend Development</li>
@@ -162,12 +161,14 @@
 			/>
 			<ProjectRow
 				title="Lokai"
+				link="https://lokai.com/"
 				role="Part of development team.<br/> Made with Zero Studios"
 				tags={['Shopify', 'GSAP']}
 				image="/images/lokai.jpg"
 			/>
 			<ProjectRow
 				title="Crap Eyewear"
+				link="https://www.crapeyewear.com/"
 				role="Part of development team. <br/>Made with Zero Studios"
 				tags={['Shopify', 'GSAP']}
 				image="/images/crap.jpg"
@@ -180,12 +181,14 @@
 			/>
 			<ProjectRow
 				title="ADC Awards"
+				link="https://play.adcawards.org/"
 				role="Interactive Design and Development"
 				tags={['Phaser.js', 'Sveltekit']}
 				image="/images/adcawards.jpg"
 			/>
 			<ProjectRow
 				title="Black Frame"
+				link="https://framenoir.com/"
 				role="Interactive Design and Development<br/>Made with For Office Use Only"
 				tags={['GSAP', 'Three.js']}
 				image="/images/blackframe.jpg"
@@ -627,6 +630,20 @@
 				display: block;
 				grid-column: 10 / span 3;
 				width: auto;
+				font-weight: 600;
+				font-size: 1.5rem;
+				line-height: 1.2;
+				padding: 0;
+				p {
+					margin: 0;
+				}
+
+				ul {
+					margin: 0;
+					padding: 0;
+					list-style: none;
+					font-weight: 500;
+				}
 			}
 		}
 	}
