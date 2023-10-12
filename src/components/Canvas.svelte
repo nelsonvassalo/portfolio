@@ -59,12 +59,14 @@
 		ColorManagement.enabled = true;
 
 		const scene = new Scene();
-		const fov = 55;
+
+		const cameraPosition = 800;
+		const fov = (180 * (2 * Math.atan(window.innerHeight / 2 / cameraPosition))) / Math.PI;
 
 		const camera = new PerspectiveCamera(fov, wW / wH, 0.01, 5000);
 
 		const z = (wW / Math.tan((fov * Math.PI) / 360)) * 0.5;
-		camera.position.set(0, 0, z);
+		camera.position.set(0, 0, cameraPosition);
 		// camera.lookAt([0, 0, 0]);
 
 		function resize() {

@@ -194,24 +194,40 @@
 				<h3>Clients</h3>
 				<div>
 					<ul bind:offsetWidth={ulWidth}>
-						<li><a href="" />Art Directors Club</li>
-						<li><a href="" />Paul Institute Records</li>
-						<li><a href="" />BaseDesign</li>
-						<li><a href="" />Karlssonwilker</li>
-						<li><a href="" />NOS</li>
-						<li><a href="" />Get Golden</li>
-						<li><a href="" />SUPA</li>
-						<li><a href="" />Pony Earth</li>
+						<li><a href="http://adcawards.org/" target="_blank">Art Directors Club</a></li>
+						<li><a href="http://paul-institute.com/" target="_blank">Paul Institute Records</a></li>
+						<li><a href="http://basedesign.com" target="_blank">BaseDesign</a></li>
+						<li><a href="http://karlssonwilker.com" target="_blank">Karlssonwilker</a></li>
+						<li><a href="http://www.nos.pt/en/" target="_blank">NOS</a></li>
+						<li><a href="http://getgolden.com" target="_blank">Get Golden</a></li>
+						<li><a href="http://www.emakina.com/en-be/home" target="_blank">Emakina</a></li>
+						<li><a href="http://alexiszurflueh.com/" target="_blank">Alexis Zurflüh</a></li>
+						<li>
+							<a
+								href="http://www.theverge.com/2018/9/13/17847312/human-fashion-show-installation-body-modification-sci-fi-transdermal-implants"
+								target="_blank">Society of Spectacle</a
+							>
+						</li>
+						<li><a href="http://moondial.com/supa/" target="_blank">SUPA</a></li>
+						<li><a href="https://www.ponyearth.com/" target="_blank">Pony Earth</a></li>
 					</ul>
 					<ul>
-						<li><a href="" />Art Directors Club</li>
-						<li><a href="" />Paul Institute Records</li>
-						<li><a href="" />BaseDesign</li>
-						<li><a href="" />Karlssonwilker</li>
-						<li><a href="" />NOS</li>
-						<li><a href="" />Get Golden</li>
-						<li><a href="" />SUPA</li>
-						<li><a href="" />Pony Earth</li>
+						<li><a href="http://adcawards.org/" target="_blank">Art Directors Club</a></li>
+						<li><a href="http://paul-institute.com/" target="_blank">Paul Institute Records</a></li>
+						<li><a href="http://basedesign.com" target="_blank">BaseDesign</a></li>
+						<li><a href="http://karlssonwilker.com" target="_blank">Karlssonwilker</a></li>
+						<li><a href="http://nos.pt" target="_blank">NOS</a></li>
+						<li><a href="http://getgolden.com" target="_blank">Get Golden</a></li>
+						<li><a href="http://www.emakina.com/en-be/home" target="_blank">Emakina</a></li>
+						<li><a href="http://alexiszurflueh.com/" target="_blank">Alexis Zurflüh</a></li>
+						<li>
+							<a
+								href="http://www.theverge.com/2018/9/13/17847312/human-fashion-show-installation-body-modification-sci-fi-transdermal-implants"
+								target="_blank">Society of Spectacle</a
+							>
+						</li>
+						<li><a href="http://moondial.com/supa/" target="_blank" />SUPA</li>
+						<li><a href="https://www.ponyearth.com/" target="_blank" />Pony Earth</li>
 					</ul>
 				</div>
 			</article>
@@ -422,8 +438,8 @@
 			// backdrop-filter: blur(50px);
 		}
 		video {
-			// visibility: hidden;
-			opacity: 0.5;
+			visibility: hidden;
+			opacity: 0.1;
 			width: calc(100% - 2rem);
 			border-radius: 0.5rem;
 			align-self: flex-start;
@@ -515,14 +531,20 @@
 				flex: auto 0 0;
 				padding-right: 6rem;
 				li {
-					max-width: 390px;
 					font-size: 3rem;
 					list-style-type: none;
 					// flex: 25vw 0 0;
 					text-align: center;
-					line-height: 1;
 					font-weight: 500;
 					letter-spacing: -0.05em;
+					word-break: keep-all;
+					a {
+						display: block;
+						line-height: 1;
+						max-width: 390px;
+						text-decoration: none;
+						color: inherit;
+					}
 				}
 			}
 		}
@@ -763,12 +785,13 @@
 				// background: #fff;
 
 				box-shadow: inset #fff 8px 0px, inset #fff 0px 8px, inset #fff -8px 0, inset #fff 0 -8px;
+				transition-delay: 0s;
 			}
 			:global(a) {
 				font-size: 4.75rem;
 				color: #fff;
 				letter-spacing: -0.03em;
-				transition: box-shadow 0.2s ease;
+				transition: box-shadow 0.2s ease 1s;
 
 				font-weight: 500;
 				border: 3px solid #fff;
