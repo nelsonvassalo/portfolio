@@ -30,7 +30,7 @@
 		let font2 = new FontFaceObserver('Object Sans', {
 			weight: 700
 		});
-		$fontsLoaded = [font1, font2];
+		$fontsLoaded = [font1.load(), font2.load()];
 		console.log('🚀 ~ fontsLoaded:', $fontsLoaded);
 
 		videoPlay = video?.play();
@@ -692,7 +692,7 @@
 			grid-template-columns: repeat(12, 1fr);
 			grid-template-rows: 67px auto;
 			column-gap: 2rem;
-			border-bottom: 2px solid #000;
+			// border-bottom: 2px solid #000;
 
 			display: grid;
 			padding-block: 6.5rem;
@@ -808,9 +808,9 @@
 			// position: absolute;
 			bottom: 0;
 			left: 1em;
-			// background: #fff;
-			color: #fff;
-			border-top: 1px solid #fff;
+			background: #fff;
+			color: #000;
+			border-top: 1px solid #222;
 			// width: calc(100% - 2em);
 			width: 100%;
 			padding: 1rem;

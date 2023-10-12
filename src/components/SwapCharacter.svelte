@@ -1,7 +1,6 @@
 <script>
 	import { afterUpdate, beforeUpdate, onMount, tick } from 'svelte';
 	import { fontsLoaded } from '../code/js/store';
-	import FontFaceObserver from 'fontfaceobserver';
 	let div;
 	let hover = true;
 	let width;
@@ -29,7 +28,17 @@
 	}
 
 	onMount(async () => {
-		hover = false;
+		Promise.all($fontsLoaded).then(async (font) => {
+			hoverWidth = div.children[0].offsetWidth;
+			hover = false;
+			await tick();
+			// div.style.display = 'inline-block';
+			loaded = true;
+			initialWidth = div.offsetWidth;
+		});
+
+		// width = div.children[0].clientWidth;
+		// div.style.width = div.offsetWidth;
 	});
 
 	afterUpdate(() => {
@@ -63,7 +72,7 @@
 	on:mouseleave={!trigger && leaveHandler}
 	class:hover
 	style:width={width + 'px'}
-	style:display="inline-block"
+	style:display={loaded && 'inline-block'}
 >
 	<span>
 		<slot />

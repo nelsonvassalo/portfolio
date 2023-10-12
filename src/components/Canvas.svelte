@@ -36,7 +36,7 @@
 	import blurFrag from '../code/js/shaders/blurFrag.glsl';
 	import RoundedRect from '../code/js/RoundedRectangle';
 
-	import { scroll, glScale, glY, amplitude, hblur, vblur, kernel } from '../code/js/store';
+	import { glScale, amplitude, hblur, vblur, kernel } from '../code/js/store';
 	import RoundedRectangle from '../code/js/RoundedRectangle';
 	let canvas;
 
@@ -125,7 +125,7 @@
 
 		// const planeGeom = new PlaneGeometry(1, 1);
 		const planeGeom = new RoundedRect(rect.width * 1.666666, rect.height * 1.66666, 10, 64);
-		console.log('🚀 ~ rect FIRST RENDER', rect.width);
+
 		const plane = new Mesh(planeGeom, material);
 
 		scene.add(plane);
@@ -201,7 +201,8 @@
 
 			plane.position.set(
 				rect.x + rect.width * 0.5 - renderer.getSize(vec).x * 0.5,
-				-rect.y - rect.height + renderer.getSize(vec).y * 0.5 + $glY * -renderer.getSize(vec).y,
+
+				-rect.y - rect.height * 0.5 + renderer.getSize(vec).y * 0.5,
 				1.0
 			);
 			// // console.log({ $glY, $glScale }, rect.width);

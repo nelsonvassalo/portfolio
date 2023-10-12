@@ -1,15 +1,6 @@
 <script>
 	import gsap from 'gsap';
-	import {
-		glY,
-		glScale,
-		amplitude,
-		hblur,
-		vblur,
-		kernel,
-		navItems,
-		activeNav
-	} from '../code/js/store';
+	import { glScale, amplitude, hblur, vblur, kernel, navItems, activeNav } from '../code/js/store';
 	import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 	import { afterUpdate, onMount, tick } from 'svelte';
 	import clamp from '../code/js/clamp';
@@ -110,7 +101,6 @@
 							)
 						);
 
-						glY.set(gsap.getProperty(video, 'yPercent') * 0.01);
 						glScale.set(gsap.getProperty(video, 'scale'));
 					}
 				}
