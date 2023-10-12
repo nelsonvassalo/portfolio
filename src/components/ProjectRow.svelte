@@ -25,7 +25,7 @@
 			{/each}
 		</ul>
 
-		<img src={image} loading="lazy" width="1280" height="719" />
+		<img src={image} loading="lazy" width="1280" height="664" />
 		<div class="arrow">
 			{#if link}
 				<div class="icon">
@@ -112,6 +112,7 @@
 			z-index: 20;
 			border-radius: 10px;
 			pointer-events: none;
+			height: auto;
 		}
 		ul {
 			list-style: none;
