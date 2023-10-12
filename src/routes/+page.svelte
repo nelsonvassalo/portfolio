@@ -84,7 +84,9 @@
 
 <Header bind:header />
 
-<Canvas />
+{#if !loading}
+	<Canvas />
+{/if}
 <main bind:this={main} class:loading>
 	{#if loading}
 		<section class="loader">
@@ -420,7 +422,7 @@
 			// backdrop-filter: blur(50px);
 		}
 		video {
-			visibility: hidden;
+			// visibility: hidden;
 			opacity: 0.5;
 			width: calc(100% - 2rem);
 			border-radius: 0.5rem;
