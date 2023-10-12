@@ -762,7 +762,7 @@
 		align-items: center;
 		flex-direction: column;
 		justify-content: center;
-		padding-block: 6.5rem;
+		padding-block-start: 6.5rem;
 		gap: 2rem;
 		color: #fff;
 		position: relative;
@@ -805,15 +805,17 @@
 		}
 		footer {
 			margin-top: auto;
-			position: absolute;
+			// position: absolute;
 			bottom: 0;
 			left: 1em;
-			background: #fff;
-			color: #000;
-			// border-top: 1px solid #fff;
+			// background: #fff;
+			color: #fff;
+			border-top: 1px solid #fff;
 			// width: calc(100% - 2em);
 			width: 100%;
 			padding: 1rem;
+			margin-top: 6.5rem;
+
 			ul {
 				padding: 0;
 				margin: 0;
