@@ -26,10 +26,10 @@
 		// setTimeout(() => {
 		// 	loading = false;
 		// }, 300);
-		let font1 = new FontFaceObserver('Object Sans');
-		let font2 = new FontFaceObserver('Object Sans', {
+		let font1 = new FontFaceObserver('Object Sans', {
 			weight: 700
 		});
+		let font2 = new FontFaceObserver('Object Sans');
 		$fontsLoaded = [font1.load(), font2.load()];
 		console.log('🚀 ~ fontsLoaded:', $fontsLoaded);
 
