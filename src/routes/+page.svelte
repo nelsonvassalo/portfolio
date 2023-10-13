@@ -82,6 +82,10 @@
 	}
 </script>
 
+<svelte:head>
+	<link rel="preload" href="/fonts/ObjectSans-Medium.woff2" as="font" crossOrigin="anonymous" />
+</svelte:head>
+
 <Header bind:header />
 
 {#if !loading}
