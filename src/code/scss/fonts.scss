@@ -27,7 +27,7 @@
     font-family: 'Object Sans';
     font-weight: 700;
     src:
-        /* local('Object Sans Bold'), */
-        // url('/fonts/ObjectSans-Bold.woff2') format('woff2'),
+        local('Object Sans Bold'),
+        url('/fonts/ObjectSans-Bold.woff2') format('woff2'),
         url('/fonts/ObjectSans-Bold.woff') format('woff');
 }
