@@ -83,7 +83,7 @@
 </script>
 
 <svelte:head>
-	<link rel="preload" href="/fonts/ObjectSans-Medium.woff2" as="font" crossOrigin="anonymous" />
+	<link rel="preload" href="/fonts/ObjectSans-Regular.woff2" as="font" crossOrigin="anonymous" />
 </svelte:head>
 
 <Header bind:header />
@@ -92,13 +92,13 @@
 	<Canvas />
 {/if}
 <main bind:this={main} class:loading>
-	{#if loading}
-		<section class="loader">
-			<p>Loading</p>
-		</section>
-		<!-- <h1>Nelson Vassalo</h1>
+	<!-- {#if loading} -->
+	<section class="loader">
+		<p>Loading</p>
+	</section>
+	<!-- <h1>Nelson Vassalo</h1>
 	<h2>Designer & Developer</h2> -->
-	{/if}
+	<!-- {/if} -->
 	<ScrollScene headerIn={header}>
 		<section bind:this={title} class="panel intro">
 			<article>
