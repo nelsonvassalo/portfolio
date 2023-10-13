@@ -260,7 +260,7 @@
 					</p>
 				</div>
 				<div class="portrait">
-					<img src="/images/photo.jpg" alt="" />
+					<img src="/images/photo.jpg" alt="" loading="lazy" />
 				</div>
 			</article>
 
