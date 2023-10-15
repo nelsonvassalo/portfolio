@@ -86,7 +86,6 @@
 
 		tickerTimer = setInterval(() => {
 			advanceOne();
-			console.log('🚀 ~ prevI:', prevI);
 		}, 5000);
 
 		return () => {

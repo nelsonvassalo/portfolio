@@ -455,7 +455,7 @@
 		min-height: 100vh;
 		// overflow: hidden;
 		// visibility: hidden;
-		padding: 1rem;
+		padding: 1rem 0.625rem;
 
 		// min-height: 100%;
 		// top: 0;
@@ -526,7 +526,7 @@
 			position: relative;
 			// align-items: end;
 			justify-content: space-between;
-			padding: 5.25rem 1rem;
+			padding: 5.25rem 0.625rem;
 			// position: absolute;
 			align-items: end;
 			align-content: end;
@@ -582,7 +582,7 @@
 	}
 	.projects,
 	.info {
-		padding-inline: 1rem;
+		padding-inline: 0.625rem;
 		background: #fff;
 		:global(section:first-child .content) {
 			border-top: 2px solid #000;
@@ -615,9 +615,9 @@
 	.about {
 		padding-block: calc(6.5rem);
 		background: #fff;
-		padding-inline: 1rem;
+		padding-inline: 0.625rem;
 		.text {
-			grid-column: 1 / span 9;
+			grid-column: 1 / span 8;
 		}
 		h3 {
 			margin: 0;
@@ -669,6 +669,7 @@
 			column-gap: 1rem;
 			padding-block: 6.5rem;
 			border-bottom: 2px solid #000;
+			position: relative;
 			h3 {
 				display: flex;
 				column-gap: 1rem;
@@ -695,7 +696,7 @@
 			}
 
 			.resume-content {
-				grid-column: 1 / span 8;
+				grid-column: 2 / span 7;
 				a {
 					font-weight: 400;
 					text-decoration: none;
@@ -705,8 +706,12 @@
 
 			.portrait {
 				grid-column: 9 / span 4;
+				position: absolute;
+				height: 100%;
 				img {
 					width: 100%;
+					height: 100%;
+					object-fit: cover;
 				}
 			}
 
@@ -858,7 +863,7 @@
 			border-top: 1px solid #222;
 			// width: calc(100% - 2em);
 			width: 100%;
-			padding: 1rem;
+			padding: 1rem 0.625rem;
 			margin-top: 6.5rem;
 
 			ul {
@@ -878,7 +883,7 @@
 
 	aside {
 		// transform: scale(0.7);
-		padding: 1rem;
+		padding: 1rem 0.625rem;
 		// position: fixed;
 		width: 100vw;
 		// height: 100dvh;

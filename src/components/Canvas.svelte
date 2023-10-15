@@ -124,7 +124,7 @@
 		const rect = video?.getBoundingClientRect();
 
 		// const planeGeom = new PlaneGeometry(1, 1);
-		const planeGeom = new RoundedRect(rect.width * 1.666666, rect.height * 1.66666, 10, 64);
+		const planeGeom = new RoundedRect(video?.offsetWidth, video?.offsetHeight, 10, 64);
 
 		const plane = new Mesh(planeGeom, material);
 
