@@ -17,7 +17,7 @@
 
 		const panels = gsap.utils.toArray('.panel');
 
-		gsap.set('.panel video', { scale: 0.6, y: '15%' });
+		gsap.set('.panel video', { scale: 0.6 });
 
 		panels.forEach((panel, i) => {
 			const video = panel.querySelector('video');

@@ -41,16 +41,15 @@
 		videoPlay = video?.play();
 		const promises = [...$fontsLoaded, videoPlay];
 
-		console.log('🚀 ~ title:', title);
 		gsap.set(title, {
 			y: '100%'
 		});
 
-		const titleEls = gsap.utils.toArray([...title.querySelectorAll('h1, h2, small'), video]);
+		const titleEls = gsap.utils.toArray(title.querySelectorAll('h1, h2, small'));
 		console.log('🚀 ~ titleEls:', titleEls);
 
 		gsap.set(titleEls, {
-			yPercent: 200
+			yPercent: 100
 			// y: (i) => `${(i + 1) * 400}%`
 		});
 
@@ -59,11 +58,24 @@
 			loading = false;
 			gsap.to(titleEls, {
 				yPercent: 0,
-				duration: 1,
+				duration: (i) => 1 + i * 0.2,
 				ease: 'expo.inOut',
 				stagger: 0.1,
 				delay: 0.1
 			});
+			gsap.set(video, {
+				yPercent: 100
+			});
+			gsap.to(
+				video,
+
+				{
+					yPercent: 0,
+					duration: 1.5,
+					delay: 0.25,
+					ease: 'expo.inOut'
+				}
+			);
 		});
 
 		// html2canvas(title, {
@@ -490,7 +502,7 @@
 		}
 		video {
 			visibility: hidden;
-			opacity: 0.1;
+			// opacity: 0.1;
 			width: calc(100% - 2rem);
 			border-radius: 0.5rem;
 			align-self: flex-start;
