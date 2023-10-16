@@ -27,7 +27,6 @@
 	});
 
 	$: {
-		console.log({ width });
 		if (width > 352 && !expanded) {
 			expanded = true;
 		}
@@ -53,7 +52,7 @@
 				{song.track?.name},
 				{#each song.track?.artists as artist, i}
 					{#if i < 2}
-						{artist.name}{#if song.track.artists.length > 2 && i == 0},&nbsp; {/if}
+						{artist.name}{#if song.track.artists.length > 1 && i == 0},&nbsp; {/if}
 					{/if}
 				{/each}
 				{#if song.track.artists.length > 2}
@@ -77,7 +76,7 @@
 					{song.track?.name},
 					{#each song.track?.artists as artist, i}
 						{#if i < 2}
-							{artist.name}{#if song.track.artists.length > 2 && i == 0},&nbsp; {/if}
+							{artist.name}{#if song.track.artists.length > 1 && i == 0},&nbsp; {/if}
 						{/if}
 					{/each}
 					{#if song.track.artists.length > 2}

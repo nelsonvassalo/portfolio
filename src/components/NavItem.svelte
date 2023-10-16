@@ -6,7 +6,7 @@
 	export let id;
 	export let isActive;
 	function handleClick(e, link) {
-		console.log('click', { link });
+		e.preventDefault();
 		// e.preventDefault();
 		const anchorId = link.replace('#', '');
 		const anchor = document.getElementById(anchorId);

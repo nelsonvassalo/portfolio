@@ -13,7 +13,6 @@
 		gsap.registerPlugin(ScrollTrigger);
 		gsap.ticker.lagSmoothing(0);
 
-		console.log({ headerIn });
 		let topLimit = headerIn?.getBoundingClientRect().height;
 
 		const panels = gsap.utils.toArray('.panel');
@@ -23,8 +22,7 @@
 		panels.forEach((panel, i) => {
 			const video = panel.querySelector('video');
 			const topOffset = video.offsetTop;
-			console.log('🚀 ~ topOffset:', topOffset);
-			console.log(panel.querySelector('video'));
+
 			gsap.set(video, { bottom: 'auto', y: 0, top: '+50%' });
 
 			gsap.to(panel.querySelector('article h4, article h1'), {
@@ -93,11 +91,11 @@
 							clamp(
 								lerp(
 									0,
-									(5.0 / window.innerWidth) * window.devicePixelRatio,
+									(2.0 / window.innerWidth) * window.devicePixelRatio,
 									0.8 - timeline.progress
 								),
 								0,
-								5.0
+								2.0
 							)
 						);
 
@@ -129,82 +127,12 @@
 				},
 				onEnter: () => {
 					$activeNav = i;
-					console.log({ $activeNav, i });
 				},
 				onLeaveBack: () => {
 					if (i == 0) $activeNav = null;
 				}
-
-				// onEnterBack: () => {
-				// 	$activeNav = 1;
-				// }
 			});
 		});
-
-		// gsap.to('.panel', {
-		// 	yPercent: -100,
-		// 	ease: 'none',
-		// 	stagger: 0.5,
-		// 	scrollTrigger: {
-		// 		trigger: '.container',
-		// 		start: 'top top',
-		// 		end: '+=300%',
-		// 		scrub: true,
-		// 		pin: true
-		// 	}
-		// });
-
-		// panels.forEach((panel) => {
-		// 	gsap.to(panel.children[0], {
-		// 		y: -window.innerHeight,
-		// 		delay: 200,
-		// 		scrollTrigger: {
-		// 			trigger: panel,
-		// 			markers: true,
-		// 			pin: panel, // pin the trigger element while active
-		// 			start: `snap(top ${topLimit}`, // when the top of the trigger hits the top of the viewport // end after scrolling 500px beyond the start
-		// 			// end: `${window.innerHeight}px top`,
-		// 			// end: '+=1000',
-		// 			// end: 'bottom center',
-		// 			scrub: 1, // smooth scrubbing, takes 1 second to "catch up" to the scrollbar
-		// 			// pinSpacing: false,
-		// 			// anticipatePin: 1,
-		// 			onUpdate: (self) => console.log(self.getVelocity())
-		// 		}
-		// 	});
-		// 	if (panel.querySelector('video')) {
-		// 		console.log('has video');
-		// 		gsap.to(panel.querySelector('video'), {
-		// 			scale: 1,
-		// 			y: 0,
-		// 			// stagger: panel.clientHeight * 0.1,
-		// 			duration: 2,
-		// 			ease: 'cubic.inOut',
-		// 			scrollTrigger: {
-		// 				trigger: panel,
-		// 				markers: true,
-		// 				id: 'video_tl',
-		// 				scrub: true
-		// 			}
-		// 		});
-		// 	} else {
-		// 		console.log('doesnt', panel);
-		// 		ScrollTrigger.create({
-		// 			scrub: true,
-		// 			trigger: panel,
-		// 			markers: true,
-		// 			id: 'no_video'
-		// 		});
-		// 	}
-
-		// 	// ScrollTrigger.create({
-		// 	// 	animation: contentTl,
-		// 	// 	start: 'top center',
-		// 	// 	// trigger: panel,
-		// 	// 	id: 'content'
-		// 	// 	// scrub: true
-		// 	// });
-		// });
 
 		return () => {
 			ScrollTrigger.killAll();

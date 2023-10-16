@@ -46,7 +46,6 @@
 		const renderer = new WebGLRenderer({
 			antialias: true
 		});
-		console.log('🚀 ~ renderer:', renderer);
 		renderer.setSize(wW, wH);
 
 		renderer.outputColorSpace = SRGBColorSpace;
@@ -147,7 +146,7 @@
 			uniforms: {
 				...HorizontalBlurShader.uniforms,
 				h: {
-					value: (2.0 / wW) * window.devicePixelRatio
+					value: (1.0 / window.innerWidth) * window.devicePixelRatio
 				}
 			}
 		});
@@ -156,7 +155,7 @@
 			uniforms: {
 				...VerticalBlurShader.uniforms,
 				v: {
-					value: (2.0 / wW) * window.devicePixelRatio
+					value: (1.0 / window.innerHeight) * window.devicePixelRatio
 				}
 			}
 		});
@@ -171,7 +170,7 @@
 		// shaderPass.enabled = false;
 
 		window.addEventListener('resize', resize);
-		console.log({ canvas });
+
 		window.addEventListener('mousemove', (e) => {
 			shaderMaterial.uniforms.uMouse.value = e.x / wW;
 		});

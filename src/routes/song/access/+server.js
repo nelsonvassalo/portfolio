@@ -7,7 +7,7 @@ const redirect_uri = "http://nelsonvassalo.vercel.app"
 const token_endpoint = `https://accounts.spotify.com/api/token`;
 
 export const GET = async () => {
-    console.log({ client_id, client_secret, refresh_token })
+
     const response = await fetch(token_endpoint, {
         method: 'POST',
         headers: {

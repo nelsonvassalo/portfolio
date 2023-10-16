@@ -3,6 +3,7 @@
 	import { onMount, tick } from 'svelte';
 	import Lenis from '@studio-freight/lenis';
 	import html2canvas from 'html2canvas';
+	import isMobile from 'ismobilejs';
 	import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 	import { scroll, activeNav, lenisStore, fontsLoaded } from '../code/js/store';
 	import S from '../components/SwapWord.svelte';
@@ -23,6 +24,7 @@
 	let lenis;
 
 	onMount(() => {
+		console.log('isMobile?', isMobile().any);
 		// setTimeout(() => {
 		// 	loading = false;
 		// }, 300);
@@ -52,13 +54,8 @@
 		// 	title.querySelector('small').style.display = 'none';
 		// });
 
-		lenis = new Lenis({
-			// duration: 2,
-			// lerp: 1
-			// easing: (t) => {
-			// 	return t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2;
-			// }
-		});
+		lenis = new Lenis();
+
 		lenis.on('scroll', (e) => {
 			ScrollTrigger.update();
 			$scroll = e.animate;
@@ -88,7 +85,7 @@
 
 <Header bind:header />
 
-{#if !loading}
+{#if !loading && !isMobile().any}
 	<Canvas />
 {/if}
 <main bind:this={main} class:loading>
@@ -349,7 +346,7 @@
 								>Pangram Pangram</a
 							>
 						</li>
-						<li>Custom pixel drawing font</li>
+						<li>Custom font</li>
 					</ul>
 				</section>
 			</article>

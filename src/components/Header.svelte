@@ -26,7 +26,6 @@
 	];
 
 	$: {
-		console.log($activeNav);
 		checkActive = (i) => {
 			console.log('check active', i, i === $activeNav);
 			return i === $activeNav;
