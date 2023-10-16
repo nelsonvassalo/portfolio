@@ -1,6 +1,7 @@
 <script>
 	import '../code/scss/main.scss';
 	import { onMount, tick } from 'svelte';
+	import { fly, slide } from 'svelte/transition';
 	import Lenis from '@studio-freight/lenis';
 	import html2canvas from 'html2canvas';
 	import isMobile from 'ismobilejs';
@@ -13,6 +14,8 @@
 	import ProjectRow from '../components/ProjectRow.svelte';
 	import A from '../components/AnimatedWord.svelte';
 	import FontFaceObserver from 'fontfaceobserver';
+	import { backInOut, circOut, expoInOut, expoOut, sineOut } from 'svelte/easing';
+	import gsap from 'gsap';
 
 	let video;
 	let videoPlay;
@@ -38,9 +41,29 @@
 		videoPlay = video?.play();
 		const promises = [...$fontsLoaded, videoPlay];
 
+		console.log('🚀 ~ title:', title);
+		gsap.set(title, {
+			y: '100%'
+		});
+
+		const titleEls = gsap.utils.toArray([...title.querySelectorAll('h1, h2, small'), video]);
+		console.log('🚀 ~ titleEls:', titleEls);
+
+		gsap.set(titleEls, {
+			yPercent: 200
+			// y: (i) => `${(i + 1) * 400}%`
+		});
+
 		Promise.all(promises).then(async () => {
 			await tick();
 			loading = false;
+			gsap.to(titleEls, {
+				yPercent: 0,
+				duration: 1,
+				ease: 'expo.inOut',
+				stagger: 0.1,
+				delay: 0.1
+			});
 		});
 
 		// html2canvas(title, {
@@ -90,7 +113,7 @@
 {/if}
 <main bind:this={main} class:loading>
 	{#if loading}
-		<section class="loader">
+		<section class="loader" out:slide={{ y: '-200%', duration: 700, easing: expoInOut }}>
 			<p>Loading</p>
 		</section>
 		<!-- <h1>Nelson Vassalo</h1>
