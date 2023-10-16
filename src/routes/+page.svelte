@@ -49,7 +49,7 @@
 		console.log('🚀 ~ titleEls:', titleEls);
 
 		gsap.set(titleEls, {
-			yPercent: 100
+			yPercent: 200
 			// y: (i) => `${(i + 1) * 400}%`
 		});
 
@@ -60,7 +60,7 @@
 				yPercent: 0,
 				duration: (i) => 1 + i * 0.2,
 				ease: 'expo.inOut',
-				stagger: 0.1,
+				stagger: 0.2,
 				delay: 0.1
 			});
 			gsap.set(video, {
@@ -72,7 +72,7 @@
 				{
 					yPercent: 0,
 					duration: 1.5,
-					delay: 0.25,
+					delay: 0.2,
 					ease: 'expo.inOut'
 				}
 			);
@@ -142,14 +142,10 @@
 				<small>&darr;</small>
 			</article>
 
-			<video
-				src="videos/title1.mp4"
-				autoplay
-				loop
-				muted
-				bind:this={video}
-				type="video/mp4; codecs='avc1.42E01E, mp4a.40.2'"
-			/>
+			<video autoplay loop muted bind:this={video}>
+				<source src="videos/title1.mp4" type="video/mp4" />
+				<source src="videos/title1.mp4" type="video/mp4; codecs='avc1.42E01E, mp4a.40.2'" />
+			</video>
 		</section>
 		<section class="about">
 			<article>
@@ -501,8 +497,8 @@
 			// backdrop-filter: blur(50px);
 		}
 		video {
-			visibility: hidden;
-			// opacity: 0.1;
+			// visibility: hidden;
+			opacity: 0;
 			width: calc(100% - 2rem);
 			border-radius: 0.5rem;
 			align-self: flex-start;
