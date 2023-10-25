@@ -6,6 +6,7 @@ export const amplitude = writable(0)
 export const hblur = writable(0)
 export const vblur = writable(0)
 export const kernel = writable(0)
+export const alpha = writable(0);
 export const lenisStore = writable(null)
 export const activeNav = writable(null);
 export const navItems = writable();

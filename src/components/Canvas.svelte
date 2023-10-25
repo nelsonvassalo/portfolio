@@ -36,17 +36,28 @@
 	import blurFrag from '../code/js/shaders/blurFrag.glsl';
 	import RoundedRect from '../code/js/RoundedRectangle';
 
-	import { glScale, amplitude, hblur, vblur, kernel } from '../code/js/store';
+	import { glScale, amplitude, hblur, vblur, kernel, alpha } from '../code/js/store';
 	import RoundedRectangle from '../code/js/RoundedRectangle';
+	import AnimatedWord from './AnimatedWord.svelte';
+	import { FullScreenQuad } from 'three/examples/jsm/postprocessing/Pass';
 	let canvas;
 
 	onMount(() => {
-		const wW = window.innerWidth;
-		const wH = window.innerHeight;
+		let wW, wH;
 		const renderer = new WebGLRenderer({
 			antialias: true
 		});
-		renderer.setSize(wW, wH);
+
+		function resize() {
+			wW = window.innerWidth;
+			wH = window.innerHeight;
+			renderer.setSize(wW, wH);
+			// camera.perspective({ aspect: gl.canvas.width / gl.canvas.height });
+		}
+
+		resize();
+
+		window.addEventListener('resize', resize);
 
 		renderer.outputColorSpace = SRGBColorSpace;
 
@@ -68,38 +79,21 @@
 		camera.position.set(0, 0, cameraPosition);
 		// camera.lookAt([0, 0, 0]);
 
-		function resize() {
-			renderer.setSize(wW, wH);
-			// camera.perspective({ aspect: gl.canvas.width / gl.canvas.height });
-		}
-
-		resize();
-
-		const shader = {
-			defines: { LABEL: 'value' },
-			uniforms: {
-				uTime: {
-					value: 0
-				},
-				tDiffuse: {
-					value: null
-				},
-				uResolution: {
-					value: new Vector2(wW, wH)
-				},
-				uAmt: {
-					value: 0
-				},
-				uBlur: {
-					value: 0
-				},
-				uMouse: {
-					value: 0
-				}
-			},
-			vertexShader: vertex,
-			fragmentShader: fragment
-		};
+		// const blurShader = {
+		// 	uniforms: {
+		// 		uResolution: {
+		// 			value: new Vector2(wW, wH)
+		// 		},
+		// 		direction: {
+		// 			value: new Vector2(10, 10)
+		// 		},
+		// 		tDiffuse: {
+		// 			value: null
+		// 		}
+		// 	},
+		// 	vertexShader: vertex,
+		// 	fragmentShader: blurFrag
+		// };
 
 		// Triangle that covers viewport, with UVs that still span 0 > 1 across viewport
 		// const geometry = new BufferGeometry({
@@ -118,9 +112,38 @@
 
 		const material = new MeshBasicMaterial({ map: videoTex });
 
+		const shader = {
+			defines: { LABEL: 'value' },
+			uniforms: {
+				uTime: {
+					value: 0
+				},
+				tDiffuse: {
+					value: null
+				},
+				uResolution: {
+					value: new Vector2(wW, wH)
+				},
+				uAmt: {
+					value: 0
+				},
+				blurDirection: {
+					value: new Vector2(0, 0)
+				},
+				alpha: {
+					value: 0
+				},
+				uMouse: {
+					value: 0
+				}
+			},
+			vertexShader: vertex,
+			fragmentShader: fragment
+		};
+
 		const shaderMaterial = new ShaderMaterial(shader);
 
-		const rect = video?.getBoundingClientRect();
+		// const blurShaderMaterial = new ShaderMaterial(blurShader);
 
 		// const planeGeom = new PlaneGeometry(1, 1);
 		const planeGeom = new RoundedRect(video?.offsetWidth, video?.offsetHeight, 10, 64);
@@ -135,39 +158,22 @@
 		// const composer = new TEC(renderer);
 		composer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 		composer.setSize(wW, wH);
+		const blurPlane = new FullScreenQuad(shaderMaterial);
+		console.log('🚀 ~ blurPlane:', blurPlane);
+		const rt = new WebGLRenderTarget(wW * window.devicePixelRatio, wH * window.devicePixelRatio);
+		shaderMaterial.uniforms.tDiffuse.value = rt.texture;
+
+		// blurPlane.render(renderer);
+		// scene.add(blurPlane);
 		const renderPass = new RenderPass(scene, camera);
-		// const blurPass = new GaussianBlurPass({
-		// 	iterations: 12,
-		// 	kernelSize: 24,
-		// 	resolutionX: wW * 2
-		// });
-		const HBlurPass = new ShaderPass({
-			...HorizontalBlurShader,
-			uniforms: {
-				...HorizontalBlurShader.uniforms,
-				h: {
-					value: (1.0 / window.innerWidth) * window.devicePixelRatio
-				}
-			}
-		});
-		const VBlurPass = new ShaderPass({
-			...VerticalBlurShader,
-			uniforms: {
-				...VerticalBlurShader.uniforms,
-				v: {
-					value: (1.0 / window.innerHeight) * window.devicePixelRatio
-				}
-			}
-		});
-		const shaderPass = new ShaderPass(shaderMaterial, 'tDiffuse');
 
-		// shaderPass.enabled = false;
+		// const blurPass = new ShaderPass(blurShaderMaterial, 'tDiffuse');
+		// const shaderPass = new ShaderPass(shaderMaterial, 'tDiffuse');
 
-		composer.addPass(renderPass);
-		composer.addPass(HBlurPass);
-		composer.addPass(VBlurPass);
-		composer.addPass(shaderPass);
-		// shaderPass.enabled = false;
+		// // shaderPass.enabled = false;
+		// composer.addPass(renderPass);
+		// composer.addPass(shaderPass);
+		// composer.r3222enderToScreen = false;
 
 		window.addEventListener('resize', resize);
 
@@ -180,23 +186,42 @@
 		const iterations = 8;
 		const fbo1 = new WebGLRenderTarget(wW, wH);
 		const fbo2 = new WebGLRenderTarget(wW, wH);
+		// shaderMaterial.uniforms.blurDirection.value = new Vector2(10, 10);
 
 		const raf = (time) => {
 			const newTime = clock.getElapsedTime();
 			shaderMaterial.uniforms.uTime.value = newTime;
 			shaderMaterial.uniforms.uAmt.value = $amplitude;
+			shaderMaterial.uniforms.alpha.value = $alpha;
 
-			HBlurPass.uniforms.h.value = $hblur;
-			VBlurPass.uniforms.v.value = $vblur;
-			// blurPass.iterations = $blur;
-			// blurPass.kernelSize = $kernel;
+			let writeBuffer = fbo1;
+			let readBuffer = fbo2;
+
+			//  FS Quad
+
+			for (let i = 0; i < iterations; i++) {
+				let radius = iterations - i - 1;
+
+				let t = writeBuffer;
+				writeBuffer = readBuffer;
+				readBuffer = t;
+
+				// shaderMaterial.uniforms.tDiffuse.value = readBuffer;
+
+				blurPlane.render(renderer);
+				// renderer.setRenderTarget(writeBuffer);
+				// renderer.autoClear = false;
+				// blurPlane.render(renderer);
+
+				// shaderMaterial.uniforms.blurDirection.value =
+				// 	i % 2 === 0 ? new Vector2(radius, 0) : new Vector2(0, radius);
+				// renderer.render(blurPlane, camera);
+			}
+			// renderer.setRenderTarget(null);
+
+			renderer.render(scene, camera);
 
 			const rect = video?.getBoundingClientRect();
-			// console.log('🚀 ~ rect SUBSEQUENT', rect.width);
-
-			// console.log($glY, $glScale);
-			// const style = window.getComputedStyle(video);
-			// let matrix = new WebKitCSSMatrix(style.transform);
 
 			plane.position.set(
 				rect.x + rect.width * 0.5 - renderer.getSize(vec).x * 0.5,
@@ -207,10 +232,6 @@
 			// // console.log({ $glY, $glScale }, rect.width);
 			plane.scale.set($glScale, $glScale, 1.0);
 
-			// camera.position.set(0, -$scroll.value || 0, z);
-			// plane.rotation.y += 0.02;
-
-			composer.render(scene, camera);
 			requestAnimationFrame(raf);
 		};
 		requestAnimationFrame(raf);

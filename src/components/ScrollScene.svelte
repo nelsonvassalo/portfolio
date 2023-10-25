@@ -1,6 +1,15 @@
 <script>
 	import gsap from 'gsap';
-	import { glScale, amplitude, hblur, vblur, kernel, navItems, activeNav } from '../code/js/store';
+	import {
+		glScale,
+		amplitude,
+		hblur,
+		vblur,
+		kernel,
+		navItems,
+		activeNav,
+		alpha
+	} from '../code/js/store';
 	import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 	import { afterUpdate, onMount, tick } from 'svelte';
 	import clamp from '../code/js/clamp';
@@ -75,7 +84,8 @@
 					// pin: video,
 					start: `top ${topLimit}`,
 					onUpdate: (timeline) => {
-						amplitude.set(clamp(lerp(0, 0.02, 0.65 - timeline.progress), 0, 0.02));
+						amplitude.set(clamp(lerp(0, 0.01, 0.65 - timeline.progress), 0, 0.02));
+						alpha.set(clamp(lerp(1.0, 0.98, 0.65 - timeline.progress), 0.98, 1.0));
 						hblur.set(
 							clamp(
 								lerp(

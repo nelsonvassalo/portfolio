@@ -2,6 +2,7 @@ precision highp float;
 
 uniform vec2 direction;
 uniform sampler2D tDiffuse;
+uniform vec2 uResolution;
 
 varying vec2 vUv;
 
@@ -20,7 +21,7 @@ vec4 blur(sampler2D image, vec2 uv, vec2 resolution, vec2 direction) {
   return color;
 }
 
-void main {
+void main() {
 
     vec4 color = blur(tDiffuse, vUv, uResolution.xy, direction);
     
