@@ -15,7 +15,9 @@
 		SRGBColorSpace,
 		ColorManagement,
 		WebGLRenderTarget,
-		ShaderMaterial
+		ShaderMaterial,
+		Plane,
+		PlaneGeometry
 	} from 'three';
 	// import {
 	// 	EffectComposer,
@@ -148,8 +150,10 @@
 		const plane = new Mesh(planeGeom, material);
 
 		scene.add(plane);
+		const blurPlaneGeom = new PlaneGeometry(wW, wH);
+		const blurPlane = new Mesh(blurPlaneGeom, shaderMaterial);
 
-		const blurPlane = new FullScreenQuad(shaderMaterial);
+		scene.add(blurPlane);
 
 		window.addEventListener('resize', resize);
 
@@ -159,7 +163,7 @@
 
 		const clock = new Clock();
 
-		const iterations = 8;
+		const iterations = 12;
 		let writeBuffer = new WebGLRenderTarget(
 			wW * window.devicePixelRatio,
 			wH * window.devicePixelRatio
@@ -168,7 +172,7 @@
 			wW * window.devicePixelRatio,
 			wH * window.devicePixelRatio
 		);
-		shaderMaterial.uniforms.blurDirection.value = new Vector2(10, 10);
+		// shaderMaterial.uniforms.blurDirection.value = new Vector2(10, 10);
 		renderer.render(scene, camera);
 
 		const raf = (time) => {
@@ -197,23 +201,50 @@
 			// renderer.render(scene, camera);
 			// blurPlane.render(renderer);
 
+			const rt = new WebGLRenderTarget(wW, wH);
+			renderer.setRenderTarget(rt);
+
 			for (let i = 0; i < iterations; i++) {
 				let radius = iterations - i - 1 * 10;
 				// let radius = iterations;
+				renderer.render(blurPlane, camera);
+
 				// renderer.render(scene, camera);
+				// renderer.autoClear = true;
+
+				// if (i == 0) {
+				shaderMaterial.uniforms.tDiffuse.value = rt.texture;
 				renderer.setRenderTarget(writeBuffer);
-				renderer.autoClear = true;
-				shaderMaterial.uniforms.blurDirection.value =
-					i % 2 === 0 ? new Vector2(radius, 0) : new Vector2(0, radius);
-				shaderMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-				renderer.render(scene, camera);
+				renderer.render(blurPlane, camera);
+
+				// }
+				if (i % 2 === 0) {
+					shaderMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+					shaderMaterial.uniforms.blurDirection.value = new Vector2(radius, 0);
+					renderer.setRenderTarget(writeBuffer);
+				} else {
+					shaderMaterial.uniforms.tDiffuse.value = writeBuffer.texture;
+					shaderMaterial.uniforms.blurDirection.value = new Vector2(0, radius);
+					renderer.setRenderTarget(readBuffer);
+				}
+				renderer.render(blurPlane, camera);
+
+				// blurPlane.render(renderer);
+
+				// renderer.setRenderTarget(null);
+				// blurPlane.render(renderer);
+				// renderer.render(scene, camera);
 
 				let t = writeBuffer;
 				writeBuffer = readBuffer;
 				readBuffer = t;
 			}
+			// renderer.setRenderTarget(rt);
+			renderer.setRenderTarget(rt);
+			renderer.render(scene, camera);
 			renderer.setRenderTarget(null);
-			blurPlane.render(renderer);
+			renderer.render(scene, camera);
+			// renderer.render(scene, camera);
 
 			const rect = video?.getBoundingClientRect();
 
