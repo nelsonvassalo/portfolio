@@ -23,7 +23,7 @@
 			const video = panel.querySelector('video');
 			const topOffset = video.offsetTop;
 
-			gsap.set(video, { bottom: 'auto', y: 0, top: '+50%' });
+			gsap.set(video, { bottom: 'auto', y: 0, top: '+40%' });
 
 			gsap.to(panel.querySelector('article h4, article h1'), {
 				y: -window.innerHeight + 50,
@@ -62,7 +62,7 @@
 			});
 
 			gsap.to(video, {
-				yPercent: -50,
+				yPercent: -40,
 				scale: 1,
 				scrollTrigger: {
 					scrub: true,
