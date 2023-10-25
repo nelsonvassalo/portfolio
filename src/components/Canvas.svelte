@@ -17,31 +17,17 @@
 		WebGLRenderTarget,
 		ShaderMaterial,
 		Plane,
-		PlaneGeometry
+		PlaneGeometry,
+		LinearMipMapLinearFilter
 	} from 'three';
-	// import {
-	// 	EffectComposer,
-	// 	KawaseBlurPass,
-	// 	ShaderPass,
-	// 	RenderPass,
-	// 	GaussianBlurPass
-	// } from 'postprocessing';
-
-	import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-	import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-	import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
-	import { HorizontalBlurShader } from 'three/examples/jsm/shaders/HorizontalBlurShader.js';
-	import { VerticalBlurShader } from 'three/examples/jsm/shaders/VerticalBlurShader.js';
 
 	import fragment from '../code/js/shaders/frag.glsl';
 	import vertex from '../code/js/shaders/vertex.glsl';
 	import blurFrag from '../code/js/shaders/blurFrag.glsl';
 	import RoundedRect from '../code/js/RoundedRectangle';
 
-	import { glScale, amplitude, hblur, vblur, kernel, alpha } from '../code/js/store';
-	import RoundedRectangle from '../code/js/RoundedRectangle';
-	import AnimatedWord from './AnimatedWord.svelte';
-	import { FullScreenQuad } from 'three/examples/jsm/postprocessing/Pass';
+	import { glScale, amplitude, blur, alpha } from '../code/js/store';
+
 	let canvas;
 
 	onMount(() => {
@@ -105,7 +91,9 @@
 				uAmt: {
 					value: 0
 				},
-
+				lod: {
+					value: 6
+				},
 				alpha: {
 					value: 0
 				},
@@ -117,25 +105,7 @@
 			fragmentShader: fragment
 		};
 
-		const blurShader = {
-			uniforms: {
-				tDiffuse: {
-					value: null
-				},
-				blurDirection: {
-					value: new Vector2(0, 0)
-				},
-				uResolution: {
-					value: new Vector2(wW, wH)
-				}
-			},
-			vertexShader: vertex,
-			fragmentShader: blurFrag
-		};
-
 		const shaderMaterial = new ShaderMaterial(shader);
-
-		const blurMaterial = new ShaderMaterial(blurShader);
 
 		const planeGeom = new RoundedRect(video?.offsetWidth, video?.offsetHeight, 10, 64);
 
@@ -143,7 +113,7 @@
 
 		scene.add(plane);
 		const blurPlaneGeom = new PlaneGeometry(wW, wH);
-		const blurPlane = new Mesh(blurPlaneGeom, blurMaterial);
+		const blurPlane = new Mesh(blurPlaneGeom, shaderMaterial);
 
 		scene.add(blurPlane);
 
@@ -155,15 +125,11 @@
 
 		const clock = new Clock();
 
-		const iterations = 12;
-		let writeBuffer = new WebGLRenderTarget(
-			wW * window.devicePixelRatio,
-			wH * window.devicePixelRatio
-		);
-		let readBuffer = new WebGLRenderTarget(
-			wW * window.devicePixelRatio,
-			wH * window.devicePixelRatio
-		);
+		let fbo = new WebGLRenderTarget(wW * window.devicePixelRatio, wH * window.devicePixelRatio, {
+			generateMipmaps: true,
+			minFilter: LinearMipMapLinearFilter
+		});
+
 		// shaderMaterial.uniforms.blurDirection.value = new Vector2(10, 10);
 
 		const raf = (time) => {
@@ -171,6 +137,7 @@
 			shaderMaterial.uniforms.uTime.value = newTime;
 			shaderMaterial.uniforms.uAmt.value = $amplitude;
 			shaderMaterial.uniforms.alpha.value = $alpha;
+			shaderMaterial.uniforms.lod.value = $blur;
 
 			// renderer.setRenderTarget(readBuffer);
 
@@ -188,48 +155,14 @@
 			// renderer.render(scene, camera);
 			// blurPlane.render(renderer);
 
-			blurMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+			shaderMaterial.uniforms.tDiffuse.value = fbo.texture;
 
 			// const rt = new WebGLRenderTarget(wW, wH);
 			// renderer.setRenderTarget(rt);
 
-			// blurMaterial.uniforms.blurDirection.value = new Vector2(10, 10);
-			for (let i = 0; i < iterations; i++) {
-				let radius = iterations - i - 1 * 10;
+			// renderer.render(blurPlane, camera);
 
-				// renderer.render(blurPlane, camera);
-
-				// if (i == 0) {
-				// blurMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-				// renderer.setRenderTarget(writeBuffer);
-				// renderer.render(blurPlane, camera);
-
-				// }
-
-				if (i % 2 === 0) {
-					blurMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-					blurMaterial.uniforms.blurDirection.value = new Vector2(radius, 0);
-					renderer.setRenderTarget(writeBuffer);
-				} else {
-					blurMaterial.uniforms.tDiffuse.value = writeBuffer.texture;
-					blurMaterial.uniforms.blurDirection.value = new Vector2(0, radius);
-					renderer.setRenderTarget(readBuffer);
-				}
-
-				renderer.render(blurPlane, camera);
-
-				// blurPlane.render(renderer);
-
-				// renderer.setRenderTarget(null);
-				// blurPlane.render(renderer);
-				// renderer.render(scene, camera);
-
-				let t = writeBuffer;
-				writeBuffer = readBuffer;
-				readBuffer = t;
-			}
-
-			renderer.setRenderTarget(readBuffer);
+			renderer.setRenderTarget(fbo);
 			renderer.render(scene, camera);
 			renderer.setRenderTarget(null);
 

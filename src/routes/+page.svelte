@@ -493,7 +493,7 @@
 
 		// backg§round: #fff;
 		article {
-			background: rgba(255, 255, 255, 0.5);
+			// background: rgba(255, 255, 255, 0.5);
 			// backdrop-filter: blur(50px);
 		}
 		video {
@@ -567,6 +567,7 @@
 		.clients {
 			padding-block: 3.5rem;
 			border-bottom: 2px solid #000;
+			overflow: hidden;
 			> div {
 				width: calc(100% + 2rem);
 				margin-left: -1rem;
