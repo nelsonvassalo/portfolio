@@ -79,30 +79,6 @@
 
 		const z = (wW / Math.tan((fov * Math.PI) / 360)) * 0.5;
 		camera.position.set(0, 0, cameraPosition);
-		// camera.lookAt([0, 0, 0]);
-
-		// const blurShader = {
-		// 	uniforms: {
-		// 		uResolution: {
-		// 			value: new Vector2(wW, wH)
-		// 		},
-		// 		direction: {
-		// 			value: new Vector2(10, 10)
-		// 		},
-		// 		tDiffuse: {
-		// 			value: null
-		// 		}
-		// 	},
-		// 	vertexShader: vertex,
-		// 	fragmentShader: blurFrag
-		// };
-
-		// Triangle that covers viewport, with UVs that still span 0 > 1 across viewport
-		// const geometry = new BufferGeometry({
-		// 	position: { size: 2, data: new Float32Array([-1, -1, 3, -1, -1, 3]) },
-		// 	uv: { size: 2, data: new Float32Array([0, 0, 2, 0, 0, 2]) }
-		// });
-		// Alternatively, you could use the Triangle class.
 
 		const video = document.querySelector('video');
 
@@ -129,9 +105,7 @@
 				uAmt: {
 					value: 0
 				},
-				blurDirection: {
-					value: new Vector2(0, 0)
-				},
+
 				alpha: {
 					value: 0
 				},
@@ -143,7 +117,25 @@
 			fragmentShader: fragment
 		};
 
+		const blurShader = {
+			uniforms: {
+				tDiffuse: {
+					value: null
+				},
+				blurDirection: {
+					value: new Vector2(0, 0)
+				},
+				uResolution: {
+					value: new Vector2(wW, wH)
+				}
+			},
+			vertexShader: vertex,
+			fragmentShader: blurFrag
+		};
+
 		const shaderMaterial = new ShaderMaterial(shader);
+
+		const blurMaterial = new ShaderMaterial(blurShader);
 
 		const planeGeom = new RoundedRect(video?.offsetWidth, video?.offsetHeight, 10, 64);
 
@@ -151,7 +143,7 @@
 
 		scene.add(plane);
 		const blurPlaneGeom = new PlaneGeometry(wW, wH);
-		const blurPlane = new Mesh(blurPlaneGeom, shaderMaterial);
+		const blurPlane = new Mesh(blurPlaneGeom, blurMaterial);
 
 		scene.add(blurPlane);
 
@@ -173,17 +165,12 @@
 			wH * window.devicePixelRatio
 		);
 		// shaderMaterial.uniforms.blurDirection.value = new Vector2(10, 10);
-		renderer.render(scene, camera);
 
 		const raf = (time) => {
 			const newTime = clock.getElapsedTime();
 			shaderMaterial.uniforms.uTime.value = newTime;
 			shaderMaterial.uniforms.uAmt.value = $amplitude;
 			shaderMaterial.uniforms.alpha.value = $alpha;
-
-			// blurPlane.render();
-
-			//  FS Quad
 
 			// renderer.setRenderTarget(readBuffer);
 
@@ -201,32 +188,34 @@
 			// renderer.render(scene, camera);
 			// blurPlane.render(renderer);
 
-			const rt = new WebGLRenderTarget(wW, wH);
-			renderer.setRenderTarget(rt);
+			blurMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 
+			// const rt = new WebGLRenderTarget(wW, wH);
+			// renderer.setRenderTarget(rt);
+
+			// blurMaterial.uniforms.blurDirection.value = new Vector2(10, 10);
 			for (let i = 0; i < iterations; i++) {
 				let radius = iterations - i - 1 * 10;
-				// let radius = iterations;
-				renderer.render(blurPlane, camera);
 
-				// renderer.render(scene, camera);
-				// renderer.autoClear = true;
+				// renderer.render(blurPlane, camera);
 
 				// if (i == 0) {
-				shaderMaterial.uniforms.tDiffuse.value = rt.texture;
-				renderer.setRenderTarget(writeBuffer);
-				renderer.render(blurPlane, camera);
+				// blurMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+				// renderer.setRenderTarget(writeBuffer);
+				// renderer.render(blurPlane, camera);
 
 				// }
+
 				if (i % 2 === 0) {
-					shaderMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-					shaderMaterial.uniforms.blurDirection.value = new Vector2(radius, 0);
+					blurMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+					blurMaterial.uniforms.blurDirection.value = new Vector2(radius, 0);
 					renderer.setRenderTarget(writeBuffer);
 				} else {
-					shaderMaterial.uniforms.tDiffuse.value = writeBuffer.texture;
-					shaderMaterial.uniforms.blurDirection.value = new Vector2(0, radius);
+					blurMaterial.uniforms.tDiffuse.value = writeBuffer.texture;
+					blurMaterial.uniforms.blurDirection.value = new Vector2(0, radius);
 					renderer.setRenderTarget(readBuffer);
 				}
+
 				renderer.render(blurPlane, camera);
 
 				// blurPlane.render(renderer);
@@ -239,10 +228,11 @@
 				writeBuffer = readBuffer;
 				readBuffer = t;
 			}
-			// renderer.setRenderTarget(rt);
-			renderer.setRenderTarget(rt);
+
+			renderer.setRenderTarget(readBuffer);
 			renderer.render(scene, camera);
 			renderer.setRenderTarget(null);
+
 			renderer.render(scene, camera);
 			// renderer.render(scene, camera);
 
