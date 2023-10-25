@@ -198,19 +198,19 @@
 			// blurPlane.render(renderer);
 
 			for (let i = 0; i < iterations; i++) {
-				let t = writeBuffer;
-				writeBuffer = readBuffer;
-				readBuffer = t;
-
-				let radius = iterations - i - 1;
+				let radius = iterations - i - 1 * 10;
 				// let radius = iterations;
 				// renderer.render(scene, camera);
 				renderer.setRenderTarget(writeBuffer);
 				renderer.autoClear = true;
-				renderer.render(scene, camera);
 				shaderMaterial.uniforms.blurDirection.value =
 					i % 2 === 0 ? new Vector2(radius, 0) : new Vector2(0, radius);
 				shaderMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+				renderer.render(scene, camera);
+
+				let t = writeBuffer;
+				writeBuffer = readBuffer;
+				readBuffer = t;
 			}
 			renderer.setRenderTarget(null);
 			blurPlane.render(renderer);
