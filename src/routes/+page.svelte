@@ -213,7 +213,7 @@
 			/>
 			<ProjectRow
 				title="ADC Awards"
-				link="https://play.adcawards.org/"
+				link="https://adcgame.karlssonwilker.com/"
 				role="Interactive Design and Development"
 				tags={['Phaser.js', 'Sveltekit']}
 				image="/images/adcawards.jpg"

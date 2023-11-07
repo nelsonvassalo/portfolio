@@ -16,7 +16,6 @@
 		ColorManagement,
 		WebGLRenderTarget,
 		ShaderMaterial,
-		Plane,
 		PlaneGeometry,
 		LinearMipMapLinearFilter
 	} from 'three';
