@@ -142,7 +142,7 @@
 				<small>&darr;</small>
 			</article>
 
-			<video autoplay loop muted bind:this={video}>
+			<video autoplay loop muted bind:this={video} crossorigin="anonymous">
 				<source
 					src="https://res.cloudinary.com/duotljbpv/video/upload/v1700510653/g3sxbytuaypuml7l05r0.mp4"
 					type="video/mp4"
