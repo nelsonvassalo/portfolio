@@ -143,14 +143,8 @@
 			</article>
 
 			<video autoplay loop muted bind:this={video} crossorigin="anonymous">
-				<source
-					src="https://res.cloudinary.com/duotljbpv/video/upload/v1700510653/g3sxbytuaypuml7l05r0.mp4"
-					type="video/mp4"
-				/>
-				<source
-					src="https://res.cloudinary.com/duotljbpv/video/upload/v1700510653/g3sxbytuaypuml7l05r0.mp4"
-					type="video/mp4; codecs='avc1.42E01E, mp4a.40.2'"
-				/>
+				<source src="/videos/title1.mp4" type="video/mp4" />
+				<source src="/videos/title1.mp4" type="video/mp4; codecs='avc1.42E01E, mp4a.40.2'" />
 			</video>
 		</section>
 		<section class="about">
