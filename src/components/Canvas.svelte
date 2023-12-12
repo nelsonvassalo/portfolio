@@ -22,7 +22,6 @@
 
 	import fragment from '../code/js/shaders/frag.glsl';
 	import vertex from '../code/js/shaders/vertex.glsl';
-	import blurFrag from '../code/js/shaders/blurFrag.glsl';
 	import RoundedRect from '../code/js/RoundedRectangle';
 
 	import { glScale, amplitude, blur, alpha } from '../code/js/store';

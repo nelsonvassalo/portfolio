@@ -154,7 +154,7 @@
 						One-man shop with 14 years of experience in digital experiences. Crafting culture-aware
 						interactions with a crisp eye for engaging artistic, brand and ecommerce websites.
 					</h3>
-					<h4>Available for November.<br /> Freelance and select roles.</h4>
+					<h4>Available for April 24.<br /> Freelance and select roles.</h4>
 				</div>
 				<aside>
 					<p>Design + Technology<br /> since 2009 <br />—</p>
