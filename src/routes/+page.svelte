@@ -206,6 +206,13 @@
 				image="/images/crap.jpg"
 			/>
 			<ProjectRow
+				title="Guayaki"
+				link="https://guayaki.com/"
+				role="Part of development team. <br/>Made with Zero Studios"
+				tags={['Shopify', 'GSAP']}
+				image="/images/guayaki.jpg"
+			/>
+			<ProjectRow
 				title="Jen Lu"
 				role="Interactive Design and development"
 				tags={['Gatsby', 'React', 'Three.js']}
