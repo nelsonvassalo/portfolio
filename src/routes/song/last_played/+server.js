@@ -1,10 +1,12 @@
+import { VITE_SPOTIFY_CLIENT_ID, VITE_SPOTIFY_CLIENT_SECRET, VITE_SPOTIFY_REFRESH_TOKEN } from "$env/static/private";
 import { json } from "@sveltejs/kit";
 
 const now_playing_endpoint = `https://api.spotify.com/v1/me/player/recently-played`;
 
 export async function GET() {
-    const { access_token } = await fetch('http://localhost:5173/song/access').catch(err => console.log({ err })).then(res => res.json())
-    console.log("🚀 ~ access_token:", access_token)
+    console.log({ VITE_SPOTIFY_CLIENT_ID, VITE_SPOTIFY_CLIENT_SECRET, VITE_SPOTIFY_REFRESH_TOKEN })
+    const { access_token } = await fetch('https://www.nelsonvassalo.com/song/access').catch(err => console.log({ err })).then(res => res.json())
+    console.log("🚀 ~ access_token:", access_token, VITE_SPOTIFY_CLIENT_ID, VITE_SPOTIFY_CLIENT_SECRET, VITE_SPOTIFY_REFRESH_TOKEN)
     const res = await fetch(`${now_playing_endpoint}?limit=1`, {
         headers: {
             Authorization: `Bearer ${access_token}`
