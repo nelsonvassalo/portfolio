@@ -189,6 +189,7 @@
 				title="WOO"
 				role="Strategy, design & development. <br />Archive"
 				tags={['GSAP']}
+				link="https://archive.nelsonvassalo.com/"
 				image="/images/woo.jpg"
 			/>
 			<ProjectRow
