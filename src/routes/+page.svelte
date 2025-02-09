@@ -344,11 +344,6 @@
 								target="_blank">CSS Design Awards Nominee</a
 							>
 						</li>
-						<li>
-							<a href="https://www.designrush.com/best-designs/websites/about-page" target="_blank">
-								Design Rush's Best Designs
-							</a>
-						</li>
 					</ul>
 				</section>
 				<h3>Stack</h3>
