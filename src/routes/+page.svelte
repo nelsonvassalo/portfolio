@@ -215,6 +215,7 @@
 			/>
 			<ProjectRow
 				title="Jen Lu"
+				link="https://jen.lu/"
 				role="Interactive Design and development"
 				tags={['Gatsby', 'React', 'Three.js']}
 				image="/images/jenlu.jpg"
