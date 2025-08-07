@@ -290,7 +290,7 @@
 						focused creative studios.<br />
 					</p>
 					<p>
-						Based in Lisbon, Brooklyn, and always on the web.<br />
+						Based in Brooklyn, and always on the web.<br />
 						Previously at <a href="https://dresscodeny.com/" target="_blank">Dress Code</a>,
 						<a href="https://forofficeuseonly.com/" target="_blank">For Office Use Only</a>,
 						<a href="https://zero.nyc/" target="_blank">Zero Studios</a>.
